@@ -13,21 +13,19 @@ def input_numbers() -> list[int]:
         except ValueError:
             print("Invalid input. Please enter a number or 'q' to quit.")
     
-    if not numbers:
-        return "No numbers were entered."
-    return numbers
+    if not numbers: # Checks if there is numbers.
+        raise "No numbers were entered."
+    return numbers # returns list of numbers
 
 
-def calculate_avarage(number_list : list) -> int:
+def calculate_avarage(number_list : list) -> float:
     """
     This functions calculates the avarage of numbers
     """
     try:
-        if not number_list:
-            return "No valid numbers provided."
-        return sum(number_list) / len(number_list)
+        return sum(number_list) / len(number_list) # returns the avarage of the numbers
     except Exception as e:
-        return f"Invalid. {e}"
+        raise f"Invalid. {e}"
 
 
 def main():
