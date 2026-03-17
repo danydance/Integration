@@ -1,0 +1,244 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram name="Blog API Endpoints" id="blog-api-endpoints-detailed">
+    <mxGraphModel dx="983" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="root" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontStyle=1;fontSize=16;arcSize=50;" value="/blog-api/" vertex="1">
+          <mxGeometry height="50" width="120" x="870" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" value="auth/" vertex="1">
+          <mxGeometry height="32" width="250" x="30" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_reg" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#1ba1e2;strokeColor=#006EAF;fontSize=12;fontColor=#ffffff;" value="POST  /api/auth/register/" vertex="1">
+          <mxGeometry height="28" width="250" x="30" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_reg_req" parent="auth_reg" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   username, email, password" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_reg_res" parent="auth_reg" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: user object + token" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_login" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#1ba1e2;strokeColor=#006EAF;fontSize=12;fontColor=#ffffff;" value="POST  /api/auth/login/" vertex="1">
+          <mxGeometry height="28" width="250" x="30" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_login_req" parent="auth_login" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   username, password" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_login_res" parent="auth_login" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: token" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_logout" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#1ba1e2;strokeColor=#006EAF;fontSize=12;fontColor=#ffffff;" value="POST  /api/auth/logout/" vertex="1">
+          <mxGeometry height="28" width="250" x="30" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_logout_req" parent="auth_logout" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   - (token in header)" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_logout_res" parent="auth_logout" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: 204 No Content" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_auth" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;strokeWidth=1.5;" target="auth_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sJxlPM2QqiyMUrMDWWQz-1" edge="1" parent="1" source="users_title" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="users_profile_get_req" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="users_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="users/" vertex="1">
+          <mxGeometry height="32" width="250" x="320" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="users_list" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#60a917;strokeColor=#2D7600;fontSize=12;fontColor=#ffffff;" value="GET  /api/users/" vertex="1">
+          <mxGeometry height="28" width="250" x="320" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="users_list_req" parent="users_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="users_list_res" parent="users_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: list of users" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_get" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#60a917;strokeColor=#2D7600;fontSize=12;fontColor=#ffffff;" value="GET  /api/users/&lt;id&gt;/profile/" vertex="1">
+          <mxGeometry height="28" width="250" x="320" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_get_req" parent="users_profile_get" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_get_res" parent="users_profile_get" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: profile object" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_put" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#60a917;strokeColor=#2D7600;fontSize=12;fontColor=#ffffff;" value="PUT  /api/users/&lt;id&gt;/profile/" vertex="1">
+          <mxGeometry height="28" width="250" x="320" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_put_req" parent="users_profile_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   bio, profile_picture" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="users_profile_put_res" parent="users_profile_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: updated profile" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_users" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=1.5;" target="users_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" value="posts/" vertex="1">
+          <mxGeometry height="32" width="250" x="610" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_list" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#f0a30a;strokeColor=#BD7000;fontSize=12;fontColor=#000000;" value="GET  /api/posts/  (paginated)" vertex="1">
+          <mxGeometry height="28" width="250" x="610" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_list_req" parent="posts_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   ?page=1" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_list_res" parent="posts_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: paginated post list" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_create" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#f0a30a;strokeColor=#BD7000;fontSize=12;fontColor=#000000;" value="POST  /api/posts/" vertex="1">
+          <mxGeometry height="28" width="250" x="610" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_create_req" parent="posts_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   title, content" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_create_res" parent="posts_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: created post object" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_get" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#f0a30a;strokeColor=#BD7000;fontSize=12;fontColor=#000000;" value="GET  /api/posts/&lt;id&gt;/" vertex="1">
+          <mxGeometry height="28" width="250" x="610" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_get_req" parent="posts_get" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_get_res" parent="posts_get" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: post object" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_put" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#f0a30a;strokeColor=#BD7000;fontSize=12;fontColor=#000000;" value="PUT  /api/posts/&lt;id&gt;/" vertex="1">
+          <mxGeometry height="28" width="250" x="610" y="408" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_put_req" parent="posts_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   title, content" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_put_res" parent="posts_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: updated post object" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_delete" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#f0a30a;strokeColor=#BD7000;fontSize=12;fontColor=#000000;" value="DELETE  /api/posts/&lt;id&gt;/" vertex="1">
+          <mxGeometry height="28" width="250" x="610" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_delete_req" parent="posts_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="posts_delete_res" parent="posts_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: 204 No Content" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_posts" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;strokeWidth=1.5;" target="posts_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" value="comments/" vertex="1">
+          <mxGeometry height="32" width="260" x="900" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_list" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#e51400;strokeColor=#B20000;fontSize=12;fontColor=#ffffff;" value="GET  /api/posts/&lt;id&gt;/comments/" vertex="1">
+          <mxGeometry height="28" width="260" x="900" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_list_req" parent="comments_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="260" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_list_res" parent="comments_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: list of comments" vertex="1">
+          <mxGeometry height="22" width="260" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_create" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#e51400;strokeColor=#B20000;fontSize=12;fontColor=#ffffff;" value="POST  /api/posts/&lt;id&gt;/comments/" vertex="1">
+          <mxGeometry height="28" width="260" x="900" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_create_req" parent="comments_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   content" vertex="1">
+          <mxGeometry height="22" width="260" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_create_res" parent="comments_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: created comment" vertex="1">
+          <mxGeometry height="22" width="260" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_put" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#e51400;strokeColor=#B20000;fontSize=12;fontColor=#ffffff;" value="PUT  /api/comments/&lt;id&gt;/" vertex="1">
+          <mxGeometry height="28" width="260" x="900" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_put_req" parent="comments_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   content" vertex="1">
+          <mxGeometry height="22" width="260" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_put_res" parent="comments_put" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: updated comment" vertex="1">
+          <mxGeometry height="22" width="260" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_delete" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#e51400;strokeColor=#B20000;fontSize=12;fontColor=#ffffff;" value="DELETE  /api/comments/&lt;id&gt;/" vertex="1">
+          <mxGeometry height="28" width="260" x="900" y="408" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_delete_req" parent="comments_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="260" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="comments_delete_res" parent="comments_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: 204 No Content" vertex="1">
+          <mxGeometry height="22" width="260" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_comments" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;strokeWidth=1.5;" target="comments_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="likes/" vertex="1">
+          <mxGeometry height="32" width="250" x="1200" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_list" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#76608a;strokeColor=#432D57;fontSize=12;fontColor=#ffffff;" value="GET  /api/posts/&lt;id&gt;/likes/" vertex="1">
+          <mxGeometry height="28" width="250" x="1200" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_list_req" parent="likes_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_list_res" parent="likes_list" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: like count + users" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_create" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#76608a;strokeColor=#432D57;fontSize=12;fontColor=#ffffff;" value="POST  /api/posts/&lt;id&gt;/likes/" vertex="1">
+          <mxGeometry height="28" width="250" x="1200" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_create_req" parent="likes_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_create_res" parent="likes_create" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: 201 Created" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_delete" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#76608a;strokeColor=#432D57;fontSize=12;fontColor=#ffffff;" value="DELETE  /api/posts/&lt;id&gt;/likes/" vertex="1">
+          <mxGeometry height="28" width="250" x="1200" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_delete_req" parent="likes_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="250" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="likes_delete_res" parent="likes_delete" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: 204 No Content" vertex="1">
+          <mxGeometry height="22" width="250" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_likes" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;strokeWidth=1.5;" target="likes_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_title" parent="1" style="swimlane;fontStyle=1;align=center;startSize=32;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=14;" value="swagger/" vertex="1">
+          <mxGeometry height="32" width="240" x="1490" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_ui" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#647687;strokeColor=#314354;fontSize=12;fontColor=#ffffff;" value="GET  /api/swagger/" vertex="1">
+          <mxGeometry height="28" width="240" x="1490" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_ui_req" parent="swagger_ui" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_ui_res" parent="swagger_ui" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: Swagger UI page" vertex="1">
+          <mxGeometry height="22" width="240" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_schema" parent="1" style="swimlane;fontStyle=1;align=left;startSize=28;fillColor=#647687;strokeColor=#314354;fontSize=12;fontColor=#ffffff;" value="GET  /api/schema/" vertex="1">
+          <mxGeometry height="28" width="240" x="1490" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_schema_req" parent="swagger_schema" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Request:   -" vertex="1">
+          <mxGeometry height="22" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="swagger_schema_res" parent="swagger_schema" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontSize=11;" value="Response: OpenAPI JSON schema" vertex="1">
+          <mxGeometry height="22" width="240" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_swagger" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#666666;strokeWidth=1.5;" target="swagger_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_get" parent="1" style="rounded=1;fillColor=#E1F5EE;strokeColor=#1D9E75;fontColor=#0F6E56;fontSize=12;" value="GET = Read" vertex="1">
+          <mxGeometry height="30" width="130" x="30" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_post" parent="1" style="rounded=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontColor=#185FA5;fontSize=12;" value="POST = Create" vertex="1">
+          <mxGeometry height="30" width="130" x="175" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_put" parent="1" style="rounded=1;fillColor=#FAEEDA;strokeColor=#d6b656;fontColor=#854F0B;fontSize=12;" value="PUT = Update" vertex="1">
+          <mxGeometry height="30" width="130" x="320" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_delete" parent="1" style="rounded=1;fillColor=#FCEBEB;strokeColor=#b85450;fontColor=#A32D2D;fontSize=12;" value="DELETE = Remove" vertex="1">
+          <mxGeometry height="30" width="140" x="465" y="620" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
