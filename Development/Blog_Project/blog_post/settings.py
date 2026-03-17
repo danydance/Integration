@@ -120,3 +120,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# All Added settings for django's start up
+
+AUTH_USER_MODEL = 'users.User'
