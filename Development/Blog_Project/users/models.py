@@ -7,5 +7,5 @@ class User(AbstractUser): # The Abstract User has the normal user credentials li
     profile_picture = models.CharField(max_length=500, blank=True, default='') # Creates a field for links
     created_at = models.DateTimeField(auto_now_add=True) # Automatically saves the exact date and time when the user is created
 
-    def __str__(self): # Controls what prints when you print a User class
+    def __str__(self) -> str: # Controls what prints when you print a User class
         return self.username
