@@ -37,6 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third Party - Gives API tools, token to log in, swagger
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_spectacular',
+    # My Apps - for Django not to ignore
+    'users',
+    'posts',
+    'comments',
+    'likes',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +88,8 @@ DATABASES = {
     }
 }
 
+# Tell Django to use my User instead of the default one
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -121,7 +132,21 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# For Login purposes
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
-# All Added settings for django's start up
+# Sets the title and version on Swagger page
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Blog API',
+    'DESCRIPTION': 'Blog service with users, posts, comments and likes',
+    'VERSION': '1.0.0',
+}
 
-AUTH_USER_MODEL = 'users.User'
