@@ -3,24 +3,10 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.views import View
 from rest_framework.authtoken.models import Token
+from users.utils import get_user_from_token
 
 from .models import User
 from .serializers import RegisterSerializer, UserSerializer, ProfileSerializer
-
-def get_user_from_token(request) -> User | None:
-    """
-    Helper function — reads the token from the request header
-    and returns the User it belongs to, or None if invalid.
-    """
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Token "):
-        return None
-    token_key = auth_header.split(" ")[1]
-    try:
-        token = Token.objects.get(key = token_key)
-        return token.user
-    except Token.DoesNotExist:
-        return None
     
 class RegisterView(View):
     """

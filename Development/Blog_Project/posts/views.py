@@ -2,12 +2,13 @@ import json
 from django.http import JsonResponse
 from django.views import View
 
-from users.views import get_user_from_token # Import from users view to not copy pased
+from users.utils import get_user_from_token # Import from users utils to not copy pased
+from posts.utils import get_post_by_id
 from .models import Post
 from .serializers import PostSerializer, PostWriteSerializer
 
 
-class PostListCreateView(View):
+class PostCollectionView(View):
     """
     List all posts or create a new one.
 
@@ -24,16 +25,16 @@ class PostListCreateView(View):
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
 
-        posts = Post.objects.all().order_by("-created_at")
-        data = PostSerializer(posts, many=True).data
-        return JsonResponse({"posts": list(data)}, status=200)
+        posts = Post.objects.all().order_by("-created_at") # Newest first
+        data = PostSerializer(posts, many=True).data # Multible Posts
+        return JsonResponse({"posts": list(data)}, status=200) # Retunes JSON of posts
 
     def post(self, request) -> JsonResponse:
         """
-        Create a new post — author is set automatically from the token.
+        Create a new post, owner/auther is set automatically from the token.
         """
         user = get_user_from_token(request)
-        if not user:
+        if not user: # Checks if there is no User
             return JsonResponse({"error": "Not authenticated"}, status=401)
 
         try:
@@ -42,8 +43,8 @@ class PostListCreateView(View):
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
         serializer = PostWriteSerializer(data=data)
-        if serializer.is_valid():
-            # author set from logged in user — not from request body
+        if serializer.is_valid(): # Checks if the fields are valid by the meta class
+            # owner/auther set from logged in user not from request body
             post = serializer.save(author=user)
             return JsonResponse(PostSerializer(post).data, status=201)
         return JsonResponse(serializer.errors, status=400)
@@ -59,23 +60,13 @@ class PostDetailView(View):
     Permission: must be logged in — only owner can update or delete
     """
 
-    def get_post(self, id : int) -> Post | None:
-        """
-        Gets post by id or return None if not found.
-        Avoids repeating the try/except in every method.
-        """
-        try:
-            return Post.objects.get(pk=id)
-        except Post.DoesNotExist:
-            return None
-
     def get(self, request, id: int) -> JsonResponse:
         """Return a single post by id."""
         user = get_user_from_token(request)
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
 
-        post = self.get_post(id)
+        post = get_post_by_id(id)
         if not post:
             return JsonResponse({"error": "Post not found"}, status=404)
 
@@ -87,7 +78,7 @@ class PostDetailView(View):
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
 
-        post = self.get_post(id)
+        post = get_post_by_id(id)
         if not post:
             return JsonResponse({"error": "Post not found"}, status=404)
 
@@ -112,7 +103,7 @@ class PostDetailView(View):
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
 
-        post = self.get_post(id)
+        post = get_post_by_id(id)
         if not post:
             return JsonResponse({"error": "Post not found"}, status=404)
 
