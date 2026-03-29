@@ -148,5 +148,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Blog API',
     'DESCRIPTION': 'Blog service with users, posts, comments and likes',
     'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'DEFAULT_AUTO_SCHEMA': 'drf_spectacular.openapi.AutoSchema',
 }
 

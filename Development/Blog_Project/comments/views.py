@@ -80,20 +80,19 @@ class CommentDetailView(View):
     Permission: must be logged in — only owner can update or delete
     """
 
-    @extend_schema(
-        request=CommentWriteSerializer,
-        responses={200: CommentSerializer},
-        summary="Update a comment",
-        tags=["Comments"]
-    )
-
     def get_comment(self, id: int) -> Comment | None:
         """Fetch comment by id or return None if not found."""
         try:
             return Comment.objects.get(pk=id)
         except Comment.DoesNotExist:
             return None
-
+    
+    @extend_schema(
+        request=CommentWriteSerializer,
+        responses={200: CommentSerializer},
+        summary="Update a comment",
+        tags=["Comments"]
+    )
     def put(self, request, id: int) -> JsonResponse:
         """Update a comment, only the author can do this."""
         user = get_user_from_token(request)
