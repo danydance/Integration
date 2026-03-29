@@ -1,6 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.views import View
+from drf_spectacular.utils import extend_schema
 
 from users.utils import get_user_from_token
 from posts.utils import get_post_by_id
@@ -17,7 +18,11 @@ class CommentCollectionView(View):
               POST /api/posts/<post_id>/comments/ — creates a new comment
     Permission: must be logged in
     """
-
+    @extend_schema(
+        responses={200: CommentSerializer(many=True)},
+        summary="Get all comments on a post",
+        tags=["Comments"]
+    )
 
     def get(self, request, post_id: int) -> JsonResponse:
         """Return all comments for a specific post."""
@@ -33,10 +38,17 @@ class CommentCollectionView(View):
         data = CommentSerializer(comments, many=True).data
         return JsonResponse({"comments": list(data)}, status=200)
 
+    @extend_schema(
+        request=CommentWriteSerializer,
+        responses={201: CommentSerializer},
+        summary="Create a comment on a post",
+        tags=["Comments"]
+    )
+
     def post(self, request, post_id: int) -> JsonResponse:
         """
         Create a new comment on a post.
-        Author and post are set automatically — only content comes from request body.
+        Author/Owner and post are set automatically, only content comes from request body.
         """
         user = get_user_from_token(request)
         if not user:
@@ -68,15 +80,22 @@ class CommentDetailView(View):
     Permission: must be logged in — only owner can update or delete
     """
 
+    @extend_schema(
+        request=CommentWriteSerializer,
+        responses={200: CommentSerializer},
+        summary="Update a comment",
+        tags=["Comments"]
+    )
+
     def get_comment(self, id: int) -> Comment | None:
-        """Helper — fetch comment by id or return None if not found."""
+        """Fetch comment by id or return None if not found."""
         try:
             return Comment.objects.get(pk=id)
         except Comment.DoesNotExist:
             return None
 
     def put(self, request, id: int) -> JsonResponse:
-        """Update a comment — only the author can do this."""
+        """Update a comment, only the author can do this."""
         user = get_user_from_token(request)
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
@@ -100,8 +119,14 @@ class CommentDetailView(View):
             return JsonResponse(CommentSerializer(comment).data, status=200)
         return JsonResponse(serializer.errors, status=400)
 
+    @extend_schema(
+        responses={204: None},
+        summary="Delete a comment",
+        tags=["Comments"]
+    )
+
     def delete(self, request, id: int) -> JsonResponse:
-        """Delete a comment — only the author can do this."""
+        """Delete a comment, only the author can do this."""
         user = get_user_from_token(request)
         if not user:
             return JsonResponse({"error": "Not authenticated"}, status=401)
@@ -110,7 +135,7 @@ class CommentDetailView(View):
         if not comment:
             return JsonResponse({"error": "Comment not found"}, status=404)
 
-        # owner check — only the author can delete their comment
+        # owner check, only the author can delete their comment
         if comment.author != user:
             return JsonResponse({"error": "You can only delete your own comments"}, status=403)
 

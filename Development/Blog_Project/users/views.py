@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.views import View
 from rest_framework.authtoken.models import Token
-from users.utils import get_user_from_token
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
+from users.utils import get_user_from_token
 from .models import User
 from .serializers import RegisterSerializer, UserSerializer, ProfileSerializer
     
@@ -14,6 +15,12 @@ class RegisterView(View):
     POST /api/auth/register/
     Permission : anyone
     """
+    @extend_schema(
+        request=RegisterSerializer,
+        responses={201: UserSerializer},
+        summary="Register a new user",
+        tags=["Auth"]
+    )
 
     def post(self, request) -> JsonResponse:
         try:
@@ -38,6 +45,12 @@ class LoginView(View):
     POST /api/auth/login/
     Permission: anyone
     """
+    @extend_schema(
+        request=RegisterSerializer,
+        responses={200: UserSerializer},
+        summary="Login and get a token",
+        tags=["Auth"]
+    )
 
     def post(self, request) -> JsonResponse:
         try:
@@ -59,6 +72,11 @@ class LogoutView(View):
     POST /api/auth/logout/
     Permission: must be logged in
     """
+    @extend_schema(
+        responses={204: None},
+        summary="Logout — deletes token",
+        tags=["Auth"]
+    )
 
     def post(self, request) -> JsonResponse:
         user = get_user_from_token(request)
@@ -74,6 +92,11 @@ class UserListView(View):
     GET /api/users/
     Permission: must be logged in
     """
+    @extend_schema(
+        responses={200: UserSerializer(many=True)},
+        summary="Get all users",
+        tags=["Users"]
+    )
 
     def get(self, request) -> JsonResponse:
         user = get_user_from_token(request) # User or None
@@ -91,6 +114,11 @@ class ProfileView(View):
     PUT /api/users/<id>/profile/
     Permission: must be logged in
     """
+    @extend_schema(
+        responses={200: ProfileSerializer},
+        summary="Get user profile",
+        tags=["Users"]
+    )
 
     def get(self, request, id: int) -> JsonResponse:
         user = get_user_from_token(request)

@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views import View
+from drf_spectacular.utils import extend_schema
 
 from users.utils import get_user_from_token
 from posts.utils import get_post_by_id
@@ -18,6 +19,11 @@ class LikeView(View):
     Permission: must be logged in
     """
 
+    @extend_schema(
+        responses={200: LikeSerializer(many=True)},
+        summary="Get likes on a post",
+        tags=["Likes"]
+    )
     def get(self, request, post_id: int) -> JsonResponse:
         """Return like count and list of users who liked this post."""
         user = get_user_from_token(request)
@@ -34,6 +40,11 @@ class LikeView(View):
             "users": list(LikeSerializer(likes, many=True).data)
         }, status=200)
 
+    @extend_schema(
+        responses={201: LikeSerializer},
+        summary="Like a post",
+        tags=["Likes"]
+    )
     def post(self, request, post_id: int) -> JsonResponse:
         """
         Like a post.
@@ -57,6 +68,11 @@ class LikeView(View):
 
         return JsonResponse(LikeSerializer(like).data, status=201)
 
+    @extend_schema(
+        responses={204: None},
+        summary="Unlike a post",
+        tags=["Likes"]
+    )
     def delete(self, request, post_id: int) -> JsonResponse:
         """
         Unlike a post.

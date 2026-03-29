@@ -1,6 +1,8 @@
 import json
 from django.http import JsonResponse
 from django.views import View
+from drf_spectacular.utils import extend_schema
+
 
 from users.utils import get_user_from_token # Import from users utils to not copy pased
 from posts.utils import get_post_by_id
@@ -16,6 +18,11 @@ class PostCollectionView(View):
               POST /api/posts/        — creates a new post
     Permission: must be logged in
     """
+    @extend_schema(
+        responses={200: PostSerializer(many=True)},
+        summary="Get all posts",
+        tags=["Posts"]
+    )
 
     def get(self, request) -> JsonResponse:
         """
@@ -28,6 +35,13 @@ class PostCollectionView(View):
         posts = Post.objects.all().order_by("-created_at") # Newest first
         data = PostSerializer(posts, many=True).data # Multible Posts
         return JsonResponse({"posts": list(data)}, status=200) # Retunes JSON of posts
+        
+    @extend_schema(
+        request=PostWriteSerializer,
+        responses={201: PostSerializer},
+        summary="Create a post",
+        tags=["Posts"]
+    )
 
     def post(self, request) -> JsonResponse:
         """
@@ -59,6 +73,11 @@ class PostDetailView(View):
               DELETE /api/posts/<id>/ — deletes post (owner only)
     Permission: must be logged in — only owner can update or delete
     """
+    @extend_schema(
+        responses={200: PostSerializer},
+        summary="Get a post",
+        tags=["Posts"]
+    )
 
     def get(self, request, id: int) -> JsonResponse:
         """Return a single post by id."""
@@ -71,6 +90,13 @@ class PostDetailView(View):
             return JsonResponse({"error": "Post not found"}, status=404)
 
         return JsonResponse(PostSerializer(post).data, status=200)
+
+    @extend_schema(
+        request=PostWriteSerializer,
+        responses={200: PostSerializer},
+        summary="Update a post",
+        tags=["Posts"]
+    )        
 
     def put(self, request, id: int) -> JsonResponse:
         """Updates a post"""
@@ -96,6 +122,12 @@ class PostDetailView(View):
             serializer.save()
             return JsonResponse(PostSerializer(post).data, status=200)
         return JsonResponse(serializer.errors, status=400)
+
+    @extend_schema(
+        responses={204: None},
+        summary="Delete a post",
+        tags=["Posts"]
+    )
 
     def delete(self, request, id: int) -> JsonResponse:
         """Deletes a post"""
