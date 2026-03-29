@@ -1,7 +1,7 @@
 import json
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
-from django.views import View
+from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
@@ -9,7 +9,7 @@ from users.utils import get_user_from_token
 from .models import User
 from .serializers import RegisterSerializer, UserSerializer, ProfileSerializer
     
-class RegisterView(View):
+class RegisterView(APIView):
     """
     Register a new user.
     POST /api/auth/register/
@@ -39,7 +39,7 @@ class RegisterView(View):
         return JsonResponse(serializer.errors, status=400)
 
 
-class LoginView(View):
+class LoginView(APIView):
     """
     Login with username and password, get a token back.
     POST /api/auth/login/
@@ -66,7 +66,7 @@ class LoginView(View):
             return JsonResponse({"token": token.key}, status=200) # Retunes a token json
         return JsonResponse({"error": "Invalid credentials"}, status=401) # Retunes Error
     
-class LogoutView(View):
+class LogoutView(APIView):
     """
     Logout — deletes the user token.
     POST /api/auth/logout/
@@ -86,7 +86,7 @@ class LogoutView(View):
         return JsonResponse({}, status=204)
 
 
-class UserListView(View):
+class UserListView(APIView):
     """
     Get list of all users.
     GET /api/users/
@@ -107,7 +107,7 @@ class UserListView(View):
         return JsonResponse({"users": list(data)}, status=200) # retuns JSON of users
 
 
-class ProfileView(View):
+class ProfileView(APIView):
     """
     Get or update a user profile.
     GET /api/users/<id>/profile/

@@ -1,6 +1,6 @@
 import json
 from django.http import JsonResponse
-from django.views import View
+from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
 from users.utils import get_user_from_token
@@ -10,7 +10,7 @@ from .serializers import CommentSerializer, CommentWriteSerializer
 from posts.models import Post
 
 
-class CommentCollectionView(View):
+class CommentCollectionView(APIView):
     """
     List all comments on a post or create a new one.
 
@@ -71,7 +71,7 @@ class CommentCollectionView(View):
         return JsonResponse(serializer.errors, status=400)
 
 
-class CommentDetailView(View):
+class CommentDetailView(APIView):
     """
     Update or delete a specific comment.
 

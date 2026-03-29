@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.views import View
+from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
 from users.utils import get_user_from_token
@@ -9,7 +9,7 @@ from .serializers import LikeSerializer
 from posts.models import Post
 
 
-class LikeView(View):
+class LikeView(APIView):
     """
     Get likes, like a post, or unlike a post.
 

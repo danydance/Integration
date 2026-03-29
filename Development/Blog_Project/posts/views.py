@@ -1,6 +1,6 @@
 import json
 from django.http import JsonResponse
-from django.views import View
+from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
 
@@ -10,7 +10,7 @@ from .models import Post
 from .serializers import PostSerializer, PostWriteSerializer
 
 
-class PostCollectionView(View):
+class PostCollectionView(APIView):
     """
     List all posts or create a new one.
 
@@ -64,7 +64,7 @@ class PostCollectionView(View):
         return JsonResponse(serializer.errors, status=400)
 
 
-class PostDetailView(View):
+class PostDetailView(APIView):
     """
     Get, update or delete a specific post.
 
