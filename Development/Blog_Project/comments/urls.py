@@ -1,7 +1,12 @@
 from django.urls import path
 from .views import CommentCollectionView, CommentDetailView
 
-urlpatterns = [
+# Comments under posts: /api/posts/<post_id>/comments/
+post_urlpatterns = [
     path("<int:post_id>/comments/", CommentCollectionView.as_view(), name="comment-list-create"),
-    path("comments/<int:id>/", CommentDetailView.as_view(), name="comment-detail"),
+]
+
+# Comments alone: /api/comments/<id>/
+urlpatterns = [
+    path("<int:id>/", CommentDetailView.as_view(), name="comment-detail"),
 ]

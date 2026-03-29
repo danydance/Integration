@@ -17,21 +17,30 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
+from comments.urls import post_urlpatterns as comment_post_urls
+from comments.urls import urlpatterns as comment_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     # Auth
-    path("api/auth/", include("users.urls")),
+    path("api/auth/", include("users.auth_urls")),
+
     # Users
-    path("api/users/", include("users.urls")),
+    path("api/users/", include("users.user_urls")),
+
     # Posts
     path("api/posts/", include("posts.urls")),
-    # Comments nested under posts + standalone
-    path("api/posts/", include("comments.urls")),
-    path("api/", include("comments.urls")),
-    # Likes nested under posts
+
+    # Comments under posts: /api/posts/<post_id>/comments/
+    path("api/posts/", include((comment_post_urls, "comments-post"))),
+
+    # Comments alone: /api/comments/<id>/
+    path("api/comments/", include((comment_urls, "comments"))),
+
+    # Likes
     path("api/posts/", include("likes.urls")),
+
     # Swagger
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
