@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
 from posts.utils import get_post_by_id
+from .pagination import PostPagination
 from users.permissions import IsAuthenticatedManual, IsOwnerOrReadOnly
 from .models import Post
 from .serializers import PostSerializer, PostWriteSerializer
@@ -24,10 +25,14 @@ class PostCollectionView(APIView):
         tags=["Posts"]
     )
     def get(self, request) -> JsonResponse:
-        """Return all posts ordered by newest first."""
+        """
+        Return all posts ordered by newest first — paginated.
+        Use ?page=2 to get the second page.
+        Default page size is 10.
+        """
         posts = Post.objects.all().order_by("-created_at")
-        data = PostSerializer(posts, many=True).data
-        return JsonResponse({"posts": list(data)}, status=200)
+        pagination = PostPagination(posts, request, page_size=10)
+        return pagination.get_page()
 
     @extend_schema(
         request=PostWriteSerializer,
