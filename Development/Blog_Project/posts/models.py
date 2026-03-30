@@ -9,6 +9,7 @@ class Post(models.Model):
     author : str = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts') # author(User) can have many posts that what ForeignKey means
     image = models.ImageField(
         upload_to='posts/',  # saved in media/posts/ folder
+        null=True,   # allows NULL in database for existing rows
         blank=False
     ) # ImageField for picture
     caption: str = models.TextField(blank=True, default='') 

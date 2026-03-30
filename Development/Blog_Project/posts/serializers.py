@@ -10,9 +10,8 @@ class PostSerializer(serializers.ModelSerializer):
     Fields : all post fields + author username
     """
 
-    author_username : str = serializers.CharField(
-        source="author.username", read_only=True
-    )
+    author_username = serializers.CharField(source="author.username", read_only=True)
+    image = serializers.ImageField(use_url=True)
 
     class Meta:
         model = Post

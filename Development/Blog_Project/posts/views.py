@@ -42,11 +42,11 @@ class PostCollectionView(APIView):
     )
     def post(self, request) -> JsonResponse:
         """Create a new post — author set automatically from token."""
-        serializer = PostWriteSerializer(data=request.data)
+        data = request.data.dict() if hasattr(request.data, 'dict') else request.data
+        serializer = PostWriteSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            # author set from logged in user — not from request body
             post = serializer.save(author=request.user)
-            return JsonResponse(PostSerializer(post).data, status=201)
+            return JsonResponse(PostSerializer(post, context={'request': request}).data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
 
