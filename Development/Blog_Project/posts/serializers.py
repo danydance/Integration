@@ -16,21 +16,13 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "author", "author_username", "title", "content", "created_at", "updated_at")
-        read_only_fields = ("id", "author", "created_at", "updated_at")
+        fields = ["id", "author", "author_username", "image", "caption", "created_at", "updated_at"]
+        read_only_fields = ["id", "author", "created_at", "updated_at"]
 
 
 class PostWriteSerializer(serializers.ModelSerializer):
-    """
-    Serializer for creating and updating a post.
-
-    Used when : POST /api/posts/ and PUT /api/posts/<id>/
-    Fields : only title and content (author is set automatically)
-    """
-
-    title : str = serializers.CharField()
-    content : str = serializers.CharField()
+    """Write serializer, used for creating and updating posts."""
 
     class Meta:
         model = Post
-        fields = ("id", "title", "content")
+        fields = ["image", "caption"]
