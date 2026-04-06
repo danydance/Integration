@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema
 
 from .models import User
 from .serializers import RegisterSerializer, UserSerializer, ProfileSerializer
-from users.permissions import AllowAnyManual, IsAuthenticatedManual
+from users.permissions import AuthRateThrottle, AllowAnyManual, IsAuthenticatedManual
 
 
 class RegisterView(APIView):
@@ -19,6 +19,8 @@ class RegisterView(APIView):
     Response: user object + token (201) or validation errors (400)
     """
     permission_classes = [AllowAnyManual]
+    throttle_classes = [AuthRateThrottle]
+
 
     @extend_schema(
         request=RegisterSerializer,
@@ -49,6 +51,7 @@ class LoginView(APIView):
     Response: token (200) or error (401)
     """
     permission_classes = [AllowAnyManual]
+    throttle_classes = [AuthRateThrottle]
 
     @extend_schema(
         request=RegisterSerializer,

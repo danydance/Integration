@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.authtoken.models import Token
+from rest_framework.throttling import AnonRateThrottle
 from .models import User
 
 def get_user_from_token(request) -> User | None:
@@ -20,6 +21,13 @@ def get_user_from_token(request) -> User | None:
         return token.user
     except Token.DoesNotExist:
         return None
+
+class AuthRateThrottle(AnonRateThrottle):
+    """
+    Custom throttle for authentication endpoints.
+    Limits login and register attempts to 5 per minute.
+    """
+    scope = 'auth' 
 
 class AllowAnyManual(BasePermission):
     """
