@@ -15,7 +15,7 @@ class RegisterView(APIView):
 
     Endpoint: POST /api/auth/register/
     Permission: public — no login required
-    Request body: username, email, password
+    Request body: username, password
     Response: user object + token (201) or validation errors (400)
     """
     permission_classes = [AllowAnyManual]
@@ -76,7 +76,7 @@ class LogoutView(APIView):
     """
     Logout — deletes the user token.
 
-    Endpoint: POST /api/auth/logout/
+    Endpoint: DELETE /api/auth/logout/
     Permission: must be logged in
     Response: empty (204)
     Note: deletes token only — user account is NOT deleted
@@ -84,11 +84,11 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticatedManual]
 
     @extend_schema(
-        responses={204: None},
+        responses={200: None},
         summary="Logout — deletes token",
         tags=["Auth"]
     )
-    def post(self, request) -> JsonResponse:
+    def delete(self, request) -> JsonResponse:
         """Delete the user token from the database."""
         request.user.auth_token.delete()
         return JsonResponse({}, status=204)

@@ -7,13 +7,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     Converts incoming JSON into a User object and saves it to the database.
     Used when: POST /api/auth/register/
-    Fields: username, email, password (write-only)
+    Fields: username, password (write-only)
     """
-    password : str = serializers.CharField(write_only = True, min_length = 6) 
+    password: str = serializers.CharField(write_only = True, min_length = 6) 
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('username', 'password')
     
     def create(self, validated_data : dict) -> User:
         """
@@ -23,7 +23,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         """
         user = User.objects.create_user(
             username = validated_data['username'],
-            email = validated_data.get('email', ''),
             password = validated_data['password'],
         )
         return user
@@ -34,11 +33,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     Read-only serializer — never used for creating or updating.
     Used when: GET /api/users/
-    Fields: id, username, email, date_joined
+    Fields: id, username, date_joined
     """
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'date_joined')
+        fields = ('id', 'username', 'date_joined')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -46,7 +45,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     Serializer for viewing and updating a user profile.
 
     Used when: GET /api/users/<id>/profile/
-               PUT /api/users/<id>/profile/
+               PATCH /api/users/<id>/profile/
     Editable fields: bio, profile_picture
     Read-only fields: id, username (cannot be changed)
     """
