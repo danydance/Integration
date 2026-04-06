@@ -74,7 +74,7 @@ class CommentDetailView(APIView):
         summary="Update a comment",
         tags=["Comments"]
     )
-    def patch(self, request, id: int) -> JsonResponse:
+    def patch(self, request, post_id: int ,id: int) -> JsonResponse:
         """Update a comment — only the author can do this."""
         comment = self.get_comment(id)
         if not comment:
@@ -94,7 +94,7 @@ class CommentDetailView(APIView):
         summary="Delete a comment",
         tags=["Comments"]
     )
-    def delete(self, request, id: int) -> JsonResponse:
+    def delete(self, request, ost_id: int ,id: int) -> JsonResponse:
         """Delete a comment — only the author can do this."""
         comment = self.get_comment(id)
         if not comment:

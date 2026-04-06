@@ -17,15 +17,15 @@ def validate_image(image) -> str | None:
     Returns an error message string if invalid, None if valid.
 
     Allowed types: JPEG, PNG, WEBP
-    Max size: 5MB
+    Max size: 100MB
     """
     allowed_types = ['image/jpeg', 'image/png', 'image/webp']
-    max_size = 5 * 1024 * 1024  # 5MB in bytes
+    max_size = 100 * 1024 * 1024  # 100MB in bytes
 
     if image.content_type not in allowed_types:
         return "Invalid file type. Only JPEG, PNG and WEBP are allowed."
 
     if image.size > max_size:
-        return "File too large. Maximum size is 5MB."
+        return "File too large. Maximum size is 100MB."
 
     return None  # valid

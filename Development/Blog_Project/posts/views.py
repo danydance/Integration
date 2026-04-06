@@ -44,18 +44,14 @@ class PostCollectionView(APIView):
         """Create a new post — author set automatically from token."""
         image = request.FILES.get('image')
 
-        # image is required for every post
         if not image:
             return JsonResponse({"error": "Image is required"}, status=400)
 
-        # validate file type and size
         error = validate_image(image)
         if error:
             return JsonResponse({"error": error}, status=400)
-    
-        serializer = PostWriteSerializer(
-            data={**request.data, 'image': image}
-        )
+
+        serializer = PostWriteSerializer(data=request.data)
         if serializer.is_valid():
             post = serializer.save(author=request.user)
             return JsonResponse(

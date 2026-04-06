@@ -20,7 +20,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf.urls.static import static
 from django.conf import settings
 from comments.urls import post_urlpatterns as comment_post_urls
-from comments.urls import urlpatterns as comment_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,9 +35,6 @@ urlpatterns = [
 
     # Comments under posts: /api/posts/<post_id>/comments/
     path("api/posts/", include((comment_post_urls, "comments-post"))),
-
-    # Comments alone: /api/comments/<id>/
-    path("api/comments/", include((comment_urls, "comments"))),
 
     # Likes
     path("api/posts/", include("likes.urls")),
