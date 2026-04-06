@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
-from posts.utils import get_post_by_id
+from posts.utils import get_post_by_id, validate_image
 from .pagination import PostPagination
 from users.permissions import IsAuthenticatedManual, IsOwnerOrReadOnly
 from .models import Post
@@ -42,11 +42,26 @@ class PostCollectionView(APIView):
     )
     def post(self, request) -> JsonResponse:
         """Create a new post — author set automatically from token."""
-        data = request.data.dict() if hasattr(request.data, 'dict') else request.data
-        serializer = PostWriteSerializer(data=request.data, context={'request': request})
+        image = request.FILES.get('image')
+
+        # image is required for every post
+        if not image:
+            return JsonResponse({"error": "Image is required"}, status=400)
+
+        # validate file type and size
+        error = validate_image(image)
+        if error:
+            return JsonResponse({"error": error}, status=400)
+    
+        serializer = PostWriteSerializer(
+            data={**request.data, 'image': image}
+        )
         if serializer.is_valid():
             post = serializer.save(author=request.user)
-            return JsonResponse(PostSerializer(post, context={'request': request}).data, status=201)
+            return JsonResponse(
+                PostSerializer(post, context={'request': request}).data,
+                status=201
+            )
         return JsonResponse(serializer.errors, status=400)
 
 

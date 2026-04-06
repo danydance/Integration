@@ -10,3 +10,22 @@ def get_post_by_id(post_id: int) -> Post | None:
         return Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return None
+
+def validate_image(image) -> str | None:
+    """
+    Validates image file type and size.
+    Returns an error message string if invalid, None if valid.
+
+    Allowed types: JPEG, PNG, WEBP
+    Max size: 5MB
+    """
+    allowed_types = ['image/jpeg', 'image/png', 'image/webp']
+    max_size = 5 * 1024 * 1024  # 5MB in bytes
+
+    if image.content_type not in allowed_types:
+        return "Invalid file type. Only JPEG, PNG and WEBP are allowed."
+
+    if image.size > max_size:
+        return "File too large. Maximum size is 5MB."
+
+    return None  # valid

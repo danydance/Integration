@@ -41,7 +41,7 @@ class LikeView(APIView):
         tags=["Likes"]
     )
     def post(self, request, post_id: int) -> JsonResponse:
-        """Like a post — returns 400 if already liked."""
+        """Like a post — returns 409 if already liked."""
         post = get_post_by_id(post_id)
         if not post:
             return JsonResponse({"error": "Post not found"}, status=404)
