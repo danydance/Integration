@@ -49,11 +49,11 @@ class LikeView(APIView):
         # get_or_create — created=True if new, False if already liked
         like, created = Like.objects.get_or_create(post=post, user=request.user)
         if not created:
-            return JsonResponse({"error": "You already liked this post"}, status=400)
+            return JsonResponse({"error": "You already liked this post"}, status=409)
         return JsonResponse(LikeSerializer(like).data, status=201)
 
     @extend_schema(
-        responses={204: None},
+        responses={200: None},
         summary="Unlike a post",
         tags=["Likes"]
     )
@@ -65,6 +65,6 @@ class LikeView(APIView):
         try:
             like = Like.objects.get(post=post, user=request.user)
             like.delete()
-            return JsonResponse({}, status=204)
+            return JsonResponse({}, status=200)
         except Like.DoesNotExist:
             return JsonResponse({"error": "You have not liked this post"}, status=404)

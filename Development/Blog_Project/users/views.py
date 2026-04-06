@@ -78,7 +78,7 @@ class LogoutView(APIView):
 
     Endpoint: DELETE /api/auth/logout/
     Permission: must be logged in
-    Response: empty (204)
+    Response: (200)
     Note: deletes token only — user account is NOT deleted
     """
     permission_classes = [IsAuthenticatedManual]
@@ -91,7 +91,7 @@ class LogoutView(APIView):
     def delete(self, request) -> JsonResponse:
         """Delete the user token from the database."""
         request.user.auth_token.delete()
-        return JsonResponse({}, status=204)
+        return JsonResponse({}, status=200)
 
 
 class UserListView(APIView):

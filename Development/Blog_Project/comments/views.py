@@ -90,7 +90,7 @@ class CommentDetailView(APIView):
         return JsonResponse(serializer.errors, status=400)
 
     @extend_schema(
-        responses={204: None},
+        responses={200: None},
         summary="Delete a comment",
         tags=["Comments"]
     )
@@ -104,4 +104,4 @@ class CommentDetailView(APIView):
         self.check_object_permissions(request, comment)
 
         comment.delete()
-        return JsonResponse({}, status=204)
+        return JsonResponse({}, status=200)

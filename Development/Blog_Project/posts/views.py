@@ -95,7 +95,7 @@ class PostDetailView(APIView):
         return JsonResponse(serializer.errors, status=400)
 
     @extend_schema(
-        responses={204: None},
+        responses={200: None},
         summary="Delete a post",
         tags=["Posts"]
     )
@@ -109,4 +109,4 @@ class PostDetailView(APIView):
         self.check_object_permissions(request, post)
 
         post.delete()
-        return JsonResponse({}, status=204)
+        return JsonResponse({}, status=200)
