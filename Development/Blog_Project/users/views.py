@@ -81,8 +81,7 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticatedManual]
 
     @extend_schema(
-        responses={20
-                   4: None},
+        responses={204: None},
         summary="Logout — deletes token",
         tags=["Auth"]
     )
