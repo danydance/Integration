@@ -9,7 +9,7 @@ class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likes') # User Likes the post
 
     class Meta:
-        uniqe_together = ('post', 'user') # prevents user from liking the same post twice
+        unique_together = ('post', 'user') # DB level constraint — one like per user per post
         
     def __str__(self) -> str: # Controls what prints when you print a Like class
         return f"{self.user.username} liked {self.post.title}"
