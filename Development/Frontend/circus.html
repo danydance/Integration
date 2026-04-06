@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circus Pictures</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #1a1a2e;
+      color: #fff;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 40px 0 50px;
+      font-size: 2.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #f5c842;
+      text-shadow: 0 0 20px rgba(245, 200, 66, 0.4);
+    }
+
+    .carousel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .carousel img {
+      width: 700px;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+      transition: opacity 0.5s ease;
+    }
+
+    .carousel img.fade {
+      opacity: 0;
+    }
+
+    .arrow {
+      background: rgba(245, 200, 66, 0.15);
+      border: 2px solid #f5c842;
+      color: #f5c842;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .arrow:hover {
+      background: rgba(245, 200, 66, 0.35);
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .dot.active {
+      background: #f5c842;
+    }
+
+    .timer-bar-wrapper {
+      width: 700px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: #f5c842;
+      border-radius: 4px;
+      width: 100%;
+      transform-origin: left;
+      animation: shrink 30s linear;
+    }
+
+    @keyframes shrink {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Circus Pictures</h1>
+
+  <div class="carousel">
+    <button class="arrow" id="prev">&#8592;</button>
+    <img id="slide" src="" alt="Circus" />
+    <button class="arrow" id="next">&#8594;</button>
+  </div>
+
+  <div class="dots" id="dots"></div>
+  <div class="timer-bar-wrapper">
+    <div class="timer-bar" id="timerBar"></div>
+  </div>
+
+  <script>
+    // Replace these src values with your actual circus image paths or URLs
+    const images = [
+        'images/circus1.jpg',
+        'images/circus2.jpg',
+        'images/circus3.jpg',
+    ];
+
+    // ── Replace the placeholder src values above with your actual images ──
+    // Example:
+    //   'images/circus1.jpg',
+    //   'images/circus2.jpg',
+    //   'images/circus3.jpg',
+
+    let current = 0;
+    let autoTimer = null;
+
+    const slide    = document.getElementById('slide');
+    const dotsEl   = document.getElementById('dots');
+    const timerBar = document.getElementById('timerBar');
+
+    // Build dots
+    images.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(dot);
+    });
+
+    function updateDots() {
+      document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    function resetTimerBar() {
+      // Restart CSS animation by replacing the element
+      timerBar.style.animation = 'none';
+      timerBar.offsetHeight;   // reflow
+      timerBar.style.animation = '';
+    }
+
+    function goTo(index, resetAuto = true) {
+      slide.classList.add('fade');
+      setTimeout(() => {
+        current = (index + images.length) % images.length;
+        slide.src = images[current];
+        slide.classList.remove('fade');
+        updateDots();
+      }, 400);
+
+      if (resetAuto) {
+        clearInterval(autoTimer);
+        resetTimerBar();
+        startAuto();
+      }
+    }
+
+    function startAuto() {
+      autoTimer = setInterval(() => {
+        goTo(current + 1, false);
+        resetTimerBar();
+      }, 30000);
+    }
+
+    document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+
+    // Init
+    slide.src = images[0];
+    startAuto();
+  </script>
+
+</body>
+</html>
