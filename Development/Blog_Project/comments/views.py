@@ -55,7 +55,7 @@ class CommentDetailView(APIView):
     """
     Update or delete a specific comment.
 
-    Endpoint: PUT    /api/comments/<id>/
+    Endpoint: PATCH    /api/comments/<id>/
               DELETE /api/comments/<id>/
     Permission: must be logged in — only owner can update or delete
     """
@@ -74,7 +74,7 @@ class CommentDetailView(APIView):
         summary="Update a comment",
         tags=["Comments"]
     )
-    def put(self, request, id: int) -> JsonResponse:
+    def patch(self, request, id: int) -> JsonResponse:
         """Update a comment — only the author can do this."""
         comment = self.get_comment(id)
         if not comment:

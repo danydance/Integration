@@ -120,7 +120,7 @@ class ProfileView(APIView):
     Get or update a user profile.
 
     Endpoint: GET /api/users/<id>/profile/
-              PUT /api/users/<id>/profile/
+              PATCH /api/users/<id>/profile/
     Permission: must be logged in — only owner can update
     """
     permission_classes = [IsAuthenticatedManual]
@@ -144,7 +144,7 @@ class ProfileView(APIView):
         summary="Update user profile",
         tags=["Users"]
     )
-    def put(self, request, id: int) -> JsonResponse:
+    def patch(self, request, id: int) -> JsonResponse:
         """Update bio and profile_picture — only the owner can do this."""
         # owner check — only the owner can edit their own profile
         if request.user.pk != id:

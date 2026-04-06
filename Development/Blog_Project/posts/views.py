@@ -55,7 +55,7 @@ class PostDetailView(APIView):
     Get, update or delete a specific post.
 
     Endpoint: GET    /api/posts/<id>/
-              PUT    /api/posts/<id>/
+              PATCH    /api/posts/<id>/
               DELETE /api/posts/<id>/
     Permission: must be logged in — only owner can update or delete
     """
@@ -79,7 +79,7 @@ class PostDetailView(APIView):
         summary="Update a post",
         tags=["Posts"]
     )
-    def put(self, request, id: int) -> JsonResponse:
+    def patch(self, request, id: int) -> JsonResponse:
         """Update a post — only the author can do this."""
         post = get_post_by_id(id)
         if not post:
