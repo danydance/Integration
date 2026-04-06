@@ -89,9 +89,16 @@ class LogoutView(APIView):
         tags=["Auth"]
     )
     def delete(self, request) -> JsonResponse:
-        """Delete the user token from the database."""
-        request.user.auth_token.delete()
-        return JsonResponse({}, status=200)
+        """
+        Delete the user token from the database.
+        Returns 200 even if token was already deleted.
+        """
+        try:
+            request.user.auth_token.delete()
+        except Exception:
+            # token already deleted or doesn't exist — still consider it a success
+            pass
+        return JsonResponse({"message": "Logged out successfully"}, status=200)
 
 
 class UserListView(APIView):
