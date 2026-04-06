@@ -153,13 +153,16 @@ class ProfileView(APIView):
     )
     def patch(self, request, id: int) -> JsonResponse:
         """Update bio and profile_picture — only the owner can do this."""
-        # owner check — only the owner can edit their own profile
-        if request.user.pk != id:
-            return JsonResponse({"error": "You can only edit your own profile"}, status=403)
+        # 1. first check if user exists
         try:
             profile_user = User.objects.get(pk=id)
         except User.DoesNotExist:
             return JsonResponse({"error": "User not found"}, status=404)
+
+        # 2. then check ownership
+        if request.user.pk != id:
+            return JsonResponse({"error": "You can only edit your own profile"}, status=403)
+
         serializer = ProfileSerializer(profile_user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
