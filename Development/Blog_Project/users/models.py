@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser): # The Abstract User has the normal user credentials like : usernmae, email, password and more...
     bio = models.TextField(blank=True, default='') # Creates a long field for the user
     profile_picture = models.ImageField(
-        upload_to='profiles/',  # saved in media/profiles/ folder
+        upload_to='profiles/',  # Saved in media/profiles/ folder
         null=True,
         blank=True
     )
