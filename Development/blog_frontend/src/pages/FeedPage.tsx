@@ -148,7 +148,7 @@ const FeedPage: React.FC = () => {
                 ))}
             </div>
 
-            <button className="fab" onClick={() => console.log('create post')}>
+            <button className="fab" onClick={() => navigate('/create')}>
                 +
             </button>
         </div>

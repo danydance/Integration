@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ProfilePage.css'
 
@@ -38,10 +38,41 @@ const DUMMY_POSTS: Post[] = [
 
 const ProfilePage: React.FC = () => {
     const navigate = useNavigate()
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
     const [profile] = useState<Profile>(DUMMY_PROFILE)
     const [posts] = useState<Post[]>(DUMMY_POSTS)
     const [editing, setEditing] = useState<boolean>(false)
+
+    // edit state
+    const [username, setUsername] = useState<string>(DUMMY_PROFILE.username)
     const [bio, setBio] = useState<string>(DUMMY_PROFILE.bio)
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(
+        DUMMY_PROFILE.profile_picture
+    )
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            // show preview immediately
+            const url = URL.createObjectURL(file)
+            setAvatarPreview(url)
+        }
+    }
+
+    const handleSave = () => {
+        // will connect to API later
+        console.log('saving:', { username, bio, avatarPreview })
+        setEditing(false)
+    }
+
+    const handleCancel = () => {
+        // reset to original values
+        setUsername(profile.username)
+        setBio(profile.bio)
+        setAvatarPreview(profile.profile_picture)
+        setEditing(false)
+    }
 
     return (
         <div className="profile-bg">
@@ -59,24 +90,52 @@ const ProfilePage: React.FC = () => {
 
                 {/* PROFILE HEADER */}
                 <div className="profile-header">
-                    <div className="profile-avatar">
-                        {profile.profile_picture
-                            ? <img src={profile.profile_picture} alt="avatar" />
-                            : profile.username[0].toUpperCase()
-                        }
-                    </div>
-                    <div className="profile-info">
-                        <div className="profile-username">{profile.username}</div>
 
+                    {/* AVATAR */}
+                    <div
+                        className="profile-avatar"
+                        onClick={() => editing && fileInputRef.current?.click()}
+                    >
+                        {avatarPreview
+                            ? <img src={avatarPreview} alt="avatar" />
+                            : username[0].toUpperCase()
+                        }
+                        {editing && (
+                            <div className="avatar-overlay">📷</div>
+                        )}
+                    </div>
+
+                    {/* hidden file input */}
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleAvatarChange}
+                    />
+
+                    <div className="profile-info">
                         {editing ? (
-                            <textarea
-                                className="bio-input"
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                rows={2}
-                            />
+                            <>
+                                <div className="field-label">Username</div>
+                                <input
+                                    className="username-input"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <div className="field-label">Bio</div>
+                                <textarea
+                                    className="bio-input"
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                    rows={2}
+                                />
+                            </>
                         ) : (
-                            <div className="profile-bio">{bio}</div>
+                            <>
+                                <div className="profile-username">{username}</div>
+                                <div className="profile-bio">{bio}</div>
+                            </>
                         )}
 
                         <div className="profile-stats">
@@ -90,12 +149,20 @@ const ProfilePage: React.FC = () => {
                             </div>
                         </div>
 
-                        <button
-                            className="edit-btn"
-                            onClick={() => setEditing(!editing)}
-                        >
-                            {editing ? 'Save' : 'Edit Profile'}
-                        </button>
+                        {editing ? (
+                            <div className="btn-row">
+                                <button className="save-btn" onClick={handleSave}>
+                                    Save
+                                </button>
+                                <button className="cancel-btn" onClick={handleCancel}>
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <button className="edit-btn" onClick={() => setEditing(true)}>
+                                Edit Profile
+                            </button>
+                        )}
                     </div>
                 </div>
 

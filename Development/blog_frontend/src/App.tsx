@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import FeedPage from './pages/FeedPage'
 import ProfilePage from './pages/ProfilePage'
+import CreatePostPage from './pages/CreatePostPage'
+
 
 
 const App: React.FC = () => {
@@ -15,6 +17,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<FeedPage />} />
                 <Route path="*" element={<Navigate to="/login" />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/create" element={<CreatePostPage />} />
             </Routes>
         </BrowserRouter>
     )
