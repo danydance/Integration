@@ -1,18 +1,31 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './LoginPage.css'
 
 const LoginPage: React.FC = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [leaving, setLeaving] = useState<boolean>(false)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('username:', username, 'password:', password)
+        setLeaving(true)
+        setTimeout(() => navigate('/'), 800)
     }
 
     return (
         <div className="login-bg">
-            <div className="login-card">
+
+            {/* FAKE POSTS sliding up from below */}
+            <div className={`posts-preview ${leaving ? 'slide-up' : ''}`}>
+                <div className="fake-post" />
+                <div className="fake-post" />
+                <div className="fake-post" />
+            </div>
+
+            {/* LOGIN CARD gets pushed up */}
+            <div className={`login-card ${leaving ? 'push-up' : ''}`}>
                 <div className="login-logo">Moments.</div>
                 <div className="login-tagline">Share what matters</div>
 
@@ -39,7 +52,11 @@ const LoginPage: React.FC = () => {
                         />
                     </div>
 
-                    <button type="submit" className="submit-btn">
+                    <button
+                        type="submit"
+                        className="submit-btn"
+                        disabled={leaving}
+                    >
                         Sign in
                     </button>
                 </form>
@@ -52,7 +69,7 @@ const LoginPage: React.FC = () => {
 
                 <div className="register-link">
                     Don't have an account?{' '}
-                    <span>Create one</span>
+                    <span onClick={() => navigate('/register')}>Create one</span>
                 </div>
             </div>
         </div>

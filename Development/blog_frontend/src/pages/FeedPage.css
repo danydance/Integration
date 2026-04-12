@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap');
+
+.feed-bg {
+    background: #1a1a1a;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(30, 30, 30, 0.95);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: #e8e8e8;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #333333;
+    border: 1px solid #444444;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #888888;
+    font-weight: 500;
+}
+
+/* FEED */
+.feed {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 72px 16px 100px;
+}
+
+/* POST CARD */
+.post-card {
+    background: #222222;
+    border: 1px solid #2a2a2a;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.post-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #333333;
+    border: 1px solid #444444;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #888888;
+    font-weight: 500;
+}
+
+.post-username {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e8e8e8;
+}
+
+.post-time {
+    font-size: 11px;
+    color: #555555;
+    margin-top: 2px;
+}
+
+.post-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px 10px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #888888;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s, transform 0.1s;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.action-btn:hover { color: #e8e8e8; }
+.action-btn:active { transform: scale(0.9); }
+.action-btn.liked { color: #e07070; }
+
+.action-count {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888888;
+}
+
+.post-caption {
+    padding: 0 20px 12px;
+    font-size: 13px;
+    color: #aaaaaa;
+    line-height: 1.6;
+}
+
+.post-caption strong {
+    color: #e8e8e8;
+    font-weight: 500;
+    margin-right: 6px;
+}
+
+.post-comments-preview {
+    padding: 0 20px 12px;
+    font-size: 12px;
+    color: #555555;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.post-comments-preview:hover { color: #888888; }
+
+.comment-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-top: 1px solid #2a2a2a;
+}
+
+.comment-input {
+    flex: 1;
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #e8e8e8;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.comment-input::placeholder { color: #444444; }
+.comment-input:focus { border-color: #555555; }
+
+.comment-submit {
+    background: none;
+    border: none;
+    color: #888888;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+}
+
+.comment-submit:hover { color: #e8e8e8; }
+
+/* FAB */
+.fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e8e8e8;
+    border: none;
+    color: #1a1a1a;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+}
