@@ -36,3 +36,10 @@ export const deletePost = (id: number): Promise<void> => {
         method: 'DELETE',
     })
 }
+
+export const updatePost = (id: number, caption: string): Promise<Post> => {
+    return request<Post>(`/posts/${id}/`, {
+        method: 'PATCH',
+        body: JSON.stringify({ caption }),
+    })
+}

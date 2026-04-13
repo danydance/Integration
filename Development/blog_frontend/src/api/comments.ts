@@ -17,3 +17,10 @@ export const deleteComment = (postId: number, id: number) => {
         method: 'DELETE',
     })
 }
+
+export const updateComment = (postId: number, id: number, content: string) => {
+    return request<Comment>(`/posts/${postId}/comments/${id}/`, {
+        method: 'PATCH',
+        body: JSON.stringify({ content }),
+    })
+}

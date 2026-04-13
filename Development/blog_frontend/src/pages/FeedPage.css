@@ -273,3 +273,99 @@
 }
 
 .logout-btn:hover { color: #e8e8e8; }
+
+.comments-list {
+    padding: 0 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.comment-row {
+    font-size: 13px;
+    color: #aaaaaa;
+    line-height: 1.5;
+}
+
+.comment-row strong {
+    color: #e8e8e8;
+    font-weight: 500;
+    margin-right: 6px;
+}
+
+.edit-caption-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.edit-caption-input {
+    flex: 1;
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #e8e8e8;
+    outline: none;
+}
+
+.edit-comment-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.edit-comment-input {
+    flex: 1;
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #e8e8e8;
+    outline: none;
+}
+
+.edit-save-btn {
+    background: #e8e8e8;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.edit-cancel-btn {
+    background: none;
+    border: none;
+    color: #555555;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 4px;
+    transition: color 0.2s;
+}
+
+.edit-cancel-btn:hover { color: #e8e8e8; }
+
+.edit-btn-inline {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding: 0 4px;
+    margin-left: 4px;
+}
+
+.post-caption:hover .edit-btn-inline { opacity: 0.7; }
+.edit-btn-inline:hover { opacity: 1 !important; }
