@@ -19,3 +19,7 @@ export const logout = () => {
         method: 'DELETE',
     })
 }
+
+export const getUsers = () => {
+    return request<{ users: { id: number, username: string }[] }>('/users/')
+}

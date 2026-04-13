@@ -1,18 +1,18 @@
 import { request } from './client'
-import { Like } from '../types'
+import { Profile } from '../types'
 
-export const getLikes = (postId: number) => {
-    return request<{ count: number, users: Like[] }>(`/posts/${postId}/likes/`)
+export const getProfile = (id: number) => {
+    return request<Profile>(`/users/${id}/profile/`)
 }
 
-export const likePost = (postId: number) => {
-    return request<Like>(`/posts/${postId}/likes/`, {
-        method: 'POST',
-    })
-}
-
-export const unlikePost = (postId: number) => {
-    return request<void>(`/posts/${postId}/likes/`, {
-        method: 'DELETE',
+export const updateProfile = (id: number, bio: string, profilePicture?: File) => {
+    const formData = new FormData()
+    formData.append('bio', bio)
+    if (profilePicture) {
+        formData.append('profile_picture', profilePicture)
+    }
+    return request<Profile>(`/users/${id}/profile/`, {
+        method: 'PATCH',
+        body: formData,
     })
 }

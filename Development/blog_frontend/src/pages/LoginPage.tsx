@@ -11,6 +11,7 @@ const LoginPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [leaving, setLeaving] = useState<boolean>(false)
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
@@ -21,6 +22,15 @@ const LoginPage: React.FC = () => {
             // Save token to localStorage
             localStorage.setItem('token', response.token)
             // Start transition animation then navigate
+
+            //get user id
+            const { getUsers } = await import('../api/auth')
+            const usersData = await getUsers()
+            const currentUser = usersData.users.find(u => u.username === username)
+            if (currentUser) {
+                localStorage.setItem('userId', String(currentUser.id))
+            }
+
             setLeaving(true)
             setTimeout(() => navigate('/'), 800)
         } catch (err: any) {

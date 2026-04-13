@@ -32,6 +32,9 @@ const RegisterPage: React.FC = () => {
             const response = await register(username, password)
             // Save token and go to feed
             localStorage.setItem('token', response.token)
+            if (response.user) {
+                localStorage.setItem('userId', String(response.user.id))
+            }
             navigate('/')
         } catch (err: any) {
             // Username already taken or other error

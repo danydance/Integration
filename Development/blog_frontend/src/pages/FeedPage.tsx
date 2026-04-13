@@ -23,6 +23,8 @@ const FeedPage: React.FC = () => {
     const [comments, setComments] = useState<{ [key: number]: string }>({})
     const [page, setPage] = useState<number>(1)
     const [hasNext, setHasNext] = useState<boolean>(false)
+    const avatar = localStorage.getItem('userAvatar')
+    const navUsername = localStorage.getItem('userUsername') || 'U'
 
     useEffect(() => {
         fetchPosts()
@@ -103,7 +105,10 @@ const FeedPage: React.FC = () => {
                         Sign out
                     </button>
                     <div className="nav-avatar" onClick={() => navigate('/profile')}>
-                        D
+                        {avatar
+                            ? <img src={avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                            : navUsername[0].toUpperCase()
+                        }
                     </div>
                 </div>
             </nav>

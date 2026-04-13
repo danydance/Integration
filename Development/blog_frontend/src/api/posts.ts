@@ -5,7 +5,12 @@ const MEDIA_URL = 'http://127.0.0.1:8000'
 
 const fixImageUrl = (post: Post): Post => ({
     ...post,
-    image: post.image ? `${MEDIA_URL}${post.image}` : null
+    image: post.image
+        ? post.image.startsWith('http')
+            ? post.image
+            : `${MEDIA_URL}${post.image}`
+        : null,
+    liked: false
 })
 
 export const getPosts = async (page: number = 1): Promise<PaginatedPosts> => {
