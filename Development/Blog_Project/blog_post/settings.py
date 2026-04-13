@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     # Third Party - Gives API tools, token to log in, swagger
     'rest_framework',
     'rest_framework.authtoken',
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -164,6 +166,10 @@ REST_FRAMEWORK = {
         'auth': '5/minute',   # login/register — 5 attempts per minute
     }
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 
 # Sets the title and version on Swagger page
 SPECTACULAR_SETTINGS = {
