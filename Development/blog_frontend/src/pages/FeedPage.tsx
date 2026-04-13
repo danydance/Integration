@@ -1,43 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getPosts } from '../api/posts'
+import { likePost, unlikePost } from '../api/likes'
+import { createComment } from '../api/comments'
+import { logout } from '../api/auth'
+import { PaginatedPosts, Post } from '../types'
 import './FeedPage.css'
-
-interface Post {
-    id: number
-    author: number
-    author_username: string
-    image: string | null
-    caption: string
-    created_at: string
-    likes: number
-    liked: boolean
-    comments: number
-}
-
-const DUMMY_POSTS: Post[] = [
-    {
-        id: 1,
-        author: 1,
-        author_username: 'danielbeck',
-        image: 'https://picsum.photos/600/600?random=1',
-        caption: 'Beautiful sunset from the mountains 🏔️',
-        created_at: '2026-04-12T10:00:00Z',
-        likes: 12,
-        liked: true,
-        comments: 3,
-    },
-    {
-        id: 2,
-        author: 2,
-        author_username: 'john_doe',
-        image: 'https://picsum.photos/600/600?random=2',
-        caption: 'Morning coffee ☕',
-        created_at: '2026-04-12T07:00:00Z',
-        likes: 8,
-        liked: false,
-        comments: 1,
-    },
-]
 
 const getTimeAgo = (dateStr: string): string => {
     const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
@@ -48,30 +16,82 @@ const getTimeAgo = (dateStr: string): string => {
 }
 
 const FeedPage: React.FC = () => {
-    const navigate = useNavigate()  // ← moved INSIDE the component
-    const [posts, setPosts] = useState<Post[]>(DUMMY_POSTS)
+    const navigate = useNavigate()
+    const [posts, setPosts] = useState<Post[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string>('')
     const [comments, setComments] = useState<{ [key: number]: string }>({})
+    const [page, setPage] = useState<number>(1)
+    const [hasNext, setHasNext] = useState<boolean>(false)
 
-    const handleLike = (postId: number) => {
-        setPosts(posts.map(post => {
-            if (post.id === postId) {
-                return {
-                    ...post,
-                    liked: !post.liked,
-                    likes: post.liked ? post.likes - 1 : post.likes + 1
-                }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    const fetchPosts = async () => {
+        try {
+            setLoading(true)
+            const data: PaginatedPosts = await getPosts(page)
+            setPosts(prev => [...prev, ...data.posts])
+            setHasNext(data.next !== null)
+            setPage(prev => prev + 1)
+        } catch (err) {
+            setError('Failed to load posts.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleLike = async (post: Post) => {
+        try {
+            if (post.liked) {
+                await unlikePost(post.id)
+            } else {
+                await likePost(post.id)
             }
-            return post
-        }))
+            setPosts(posts.map(p => {
+                if (p.id === post.id) {
+                    return {
+                        ...p,
+                        liked: !p.liked,
+                        likes: p.liked ? p.likes - 1 : p.likes + 1
+                    }
+                }
+                return p
+            }))
+        } catch (err) {
+            console.error('Like failed', err)
+        }
     }
 
     const handleCommentChange = (postId: number, value: string) => {
         setComments({ ...comments, [postId]: value })
     }
 
-    const handleCommentSubmit = (postId: number) => {
-        console.log('comment on post', postId, ':', comments[postId])
-        setComments({ ...comments, [postId]: '' })
+    const handleCommentSubmit = async (postId: number) => {
+        const content = comments[postId]
+        if (!content?.trim()) return
+        try {
+            await createComment(postId, content)
+            setComments({ ...comments, [postId]: '' })
+            // update comment count
+            setPosts(posts.map(p =>
+                p.id === postId ? { ...p, comments: p.comments + 1 } : p
+            ))
+        } catch (err) {
+            console.error('Comment failed', err)
+        }
+    }
+
+    const handleLogout = async () => {
+        try {
+            await logout()
+        } catch (err) {
+            console.error('Logout failed', err)
+        } finally {
+            localStorage.removeItem('token')
+            navigate('/login')
+        }
     }
 
     return (
@@ -79,11 +99,24 @@ const FeedPage: React.FC = () => {
             <nav className="navbar">
                 <div className="nav-logo">Moments.</div>
                 <div className="nav-actions">
-                    <div className="nav-avatar" onClick={() => navigate('/profile')}>D</div>
+                    <button className="logout-btn" onClick={handleLogout}>
+                        Sign out
+                    </button>
+                    <div className="nav-avatar" onClick={() => navigate('/profile')}>
+                        D
+                    </div>
                 </div>
             </nav>
 
             <div className="feed">
+                {loading && posts.length === 0 && (
+                    <div className="feed-loading">Loading posts...</div>
+                )}
+
+                {error && (
+                    <div className="feed-error">{error}</div>
+                )}
+
                 {posts.map(post => (
                     <div key={post.id} className="post-card">
                         <div className="post-header">
@@ -105,7 +138,7 @@ const FeedPage: React.FC = () => {
                         <div className="post-actions">
                             <button
                                 className={`action-btn ${post.liked ? 'liked' : ''}`}
-                                onClick={() => handleLike(post.id)}
+                                onClick={() => handleLike(post)}
                             >
                                 {post.liked ? '❤️' : '🤍'}
                                 <span className="action-count">{post.likes}</span>
@@ -146,6 +179,12 @@ const FeedPage: React.FC = () => {
                         </div>
                     </div>
                 ))}
+
+                {hasNext && (
+                    <button className="load-more-btn" onClick={fetchPosts}>
+                        {loading ? 'Loading...' : 'Load more'}
+                    </button>
+                )}
             </div>
 
             <button className="fab" onClick={() => navigate('/create')}>

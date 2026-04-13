@@ -1,8 +1,19 @@
 import { request } from './client'
 import { Post, PaginatedPosts } from '../types'
 
-export const getPosts = (page: number = 1): Promise<PaginatedPosts> => {
-    return request<PaginatedPosts>(`/posts/?page=${page}`)
+const MEDIA_URL = 'http://127.0.0.1:8000'
+
+const fixImageUrl = (post: Post): Post => ({
+    ...post,
+    image: post.image ? `${MEDIA_URL}${post.image}` : null
+})
+
+export const getPosts = async (page: number = 1): Promise<PaginatedPosts> => {
+    const data = await request<PaginatedPosts>(`/posts/?page=${page}`)
+    return {
+        ...data,
+        posts: data.posts.map(fixImageUrl)
+    }
 }
 
 export const createPost = (image: File, caption: string): Promise<Post> => {

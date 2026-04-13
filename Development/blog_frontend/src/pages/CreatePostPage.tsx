@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { createPost } from '../api/posts'
 import './CreatePostPage.css'
 
 const CreatePostPage: React.FC = () => {
@@ -10,20 +11,19 @@ const CreatePostPage: React.FC = () => {
     const [preview, setPreview] = useState<string | null>(null)
     const [caption, setCaption] = useState<string>('')
     const [error, setError] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
 
-        // validate type
         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
         if (!allowedTypes.includes(file.type)) {
             setError('Only JPEG, PNG and WEBP images are allowed.')
             return
         }
 
-        // validate size — 5MB
-        if (file.size > 5 * 1024 * 1024) {
+        if (file.size > 1000 * 1024 * 1024) {
             setError('Image must be under 5MB.')
             return
         }
@@ -33,23 +33,28 @@ const CreatePostPage: React.FC = () => {
         setPreview(URL.createObjectURL(file))
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setError('')
 
         if (!image) {
             setError('Please select an image.')
             return
         }
 
-        // will connect to API later
-        console.log('creating post:', { image, caption })
-        navigate('/')
+        setLoading(true)
+        try {
+            await createPost(image, caption)
+            navigate('/')
+        } catch (err: any) {
+            setError('Failed to create post. Please try again.')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
         <div className="create-bg">
-
-            {/* NAVBAR */}
             <nav className="navbar">
                 <button className="nav-back" onClick={() => navigate('/')}>
                     ← Back
@@ -61,7 +66,6 @@ const CreatePostPage: React.FC = () => {
             <div className="create-page">
                 <form onSubmit={handleSubmit}>
 
-                    {/* UPLOAD AREA */}
                     <div
                         className="upload-area"
                         onClick={() => fileInputRef.current?.click()}
@@ -89,7 +93,6 @@ const CreatePostPage: React.FC = () => {
                         )}
                     </div>
 
-                    {/* hidden file input */}
                     <input
                         ref={fileInputRef}
                         type="file"
@@ -98,10 +101,8 @@ const CreatePostPage: React.FC = () => {
                         onChange={handleImageSelect}
                     />
 
-                    {/* ERROR */}
                     {error && <div className="create-error">{error}</div>}
 
-                    {/* CAPTION */}
                     <div className="form-group">
                         <label>Caption</label>
                         <textarea
@@ -112,8 +113,12 @@ const CreatePostPage: React.FC = () => {
                         />
                     </div>
 
-                    <button type="submit" className="submit-btn">
-                        Share Post
+                    <button
+                        type="submit"
+                        className="submit-btn"
+                        disabled={loading}
+                    >
+                        {loading ? 'Sharing...' : 'Share Post'}
                     </button>
 
                 </form>

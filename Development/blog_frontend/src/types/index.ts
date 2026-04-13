@@ -20,6 +20,9 @@ export interface Post {
     caption: string
     created_at: string
     updated_at: string
+    liked: boolean
+    likes: number
+    comments: number
 }
 
 export interface Comment {

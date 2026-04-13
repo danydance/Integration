@@ -228,3 +228,48 @@
     transform: scale(1.08);
     box-shadow: 0 12px 32px rgba(0,0,0,0.5);
 }
+
+.feed-loading {
+    text-align: center;
+    color: #555555;
+    font-size: 14px;
+    padding: 40px 0;
+}
+
+.feed-error {
+    text-align: center;
+    color: #e07070;
+    font-size: 14px;
+    padding: 40px 0;
+}
+
+.load-more-btn {
+    width: 100%;
+    padding: 14px;
+    background: #222222;
+    border: 1px solid #333333;
+    border-radius: 999px;
+    color: #888888;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+}
+
+.load-more-btn:hover {
+    background: #2a2a2a;
+    color: #e8e8e8;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #555555;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.logout-btn:hover { color: #e8e8e8; }
