@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { register } from '../api/auth'
 import './RegisterPage.css'
 
 const RegisterPage: React.FC = () => {
@@ -8,24 +9,40 @@ const RegisterPage: React.FC = () => {
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
 
-        // check passwords match
+        // Check passwords match
         if (password !== confirmPassword) {
             setError('Passwords do not match.')
             return
         }
 
-        // check minimum length
+        // Check minimum length
         if (password.length < 8) {
             setError('Password must be at least 8 characters.')
             return
         }
 
-        console.log('username:', username, 'password:', password)
+        setLoading(true)
+        try {
+            const response = await register(username, password)
+            // Save token and go to feed
+            localStorage.setItem('token', response.token)
+            navigate('/')
+        } catch (err: any) {
+            // Username already taken or other error
+            if (err?.username) {
+                setError(err.username[0])
+            } else {
+                setError('Registration failed. Please try again.')
+            }
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
