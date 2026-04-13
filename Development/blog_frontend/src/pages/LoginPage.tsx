@@ -1,17 +1,32 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { login } from '../api/auth'
 import './LoginPage.css'
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate()
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [error, setError] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
     const [leaving, setLeaving] = useState<boolean>(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLeaving(true)
-        setTimeout(() => navigate('/'), 800)
+        setError('')
+        setLoading(true)
+        
+        try {
+            const response = await login(username, password)
+            // Save token to localStorage
+            localStorage.setItem('token', response.token)
+            // Start transition animation then navigate
+            setLeaving(true)
+            setTimeout(() => navigate('/'), 800)
+        } catch (err: any) {
+            setError('Invalid username or password.')
+            setLoading(false)
+        }
     }
 
     return (
@@ -28,6 +43,8 @@ const LoginPage: React.FC = () => {
             <div className={`login-card ${leaving ? 'push-up' : ''}`}>
                 <div className="login-logo">Moments.</div>
                 <div className="login-tagline">Share what matters</div>
+
+                {error && <div className="login-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -55,7 +72,7 @@ const LoginPage: React.FC = () => {
                     <button
                         type="submit"
                         className="submit-btn"
-                        disabled={leaving}
+                        disabled={loading || leaving}
                     >
                         Sign in
                     </button>
