@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPosts } from '../api/posts'
+import { getPosts, deletePost, updatePost } from '../api/posts'
 import { likePost, unlikePost } from '../api/likes'
-import { createComment } from '../api/comments'
+import { getComments, createComment, deleteComment, updateComment } from '../api/comments'
 import { logout } from '../api/auth'
 import { PaginatedPosts, Post } from '../types'
-import { getComments } from '../api/comments'
 import './FeedPage.css'
-import { deletePost } from '../api/posts'
-import { deleteComment } from '../api/comments'
-import { updatePost } from '../api/posts'
-import { updateComment } from '../api/comments'
 
+/**
+ * getTimeAgon - converts Date to string of the relative time.
+ * Examples : "just now", "5m ago", "3d ago" 
+ * Defined outside the component because it doesnt use any state or props.
+ */
 const getTimeAgo = (dateStr: string): string => {
     const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
     if (diff < 60) return 'just now'
@@ -20,26 +20,57 @@ const getTimeAgo = (dateStr: string): string => {
     return `${Math.floor(diff / 86400)}d ago`
 }
 
+/**
+ * The Big FeedPage lol
+ * 
+ * Shows all posts in reverse order with : 
+ * - Like / unlike
+ * - View, add, edit and delete comments
+ * - Pagination (load more...)
+ * - Logout
+ * - Navigate to profile and create post
+ */
 const FeedPage: React.FC = () => {
     const navigate = useNavigate()
+
+    // Auth & user info
+    // Reads from localStorage
+    const avatar = localStorage.getItem('userAvatar')
+    const navUsername = localStorage.getItem('userUsername') || 'U'
+    const currentUserId = parseInt(localStorage.getItem('userId') || '0')
+
+    // Posts state
     const [posts, setPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string>('')
-    const [comments, setComments] = useState<{ [key: number]: string }>({})
     const [page, setPage] = useState<number>(1)
     const [hasNext, setHasNext] = useState<boolean>(false)
-    const avatar = localStorage.getItem('userAvatar')
-    const navUsername = localStorage.getItem('userUsername') || 'U'
+
+    // Comment state
+    // Comments: tracks the input value per post
+    const [comments, setComments] = useState<{ [key: number]: string }>({})
+    // OpenComments: tracks which posts comments are expanded
     const [openComments, setOpenComments] = useState<{ [key: number]: boolean }>({})
+    // PostComments: stores fetched comments per post
     const [postComments, setPostComments] = useState<{ [key: number]: any[] }>({})
+
+    // Editing state
+    // EditingPost: id of the post currently being editd
     const [editingPost, setEditingPost] = useState<number | null>(null)
     const [editPostCaption, setEditPostCaption] = useState<string>('')
+    //EditingComment: id of the comment currently being edited
     const [editingComment, setEditingComment] = useState<number | null>(null)
     const [editCommentContent, setEditCommentContent] = useState<string>('')
+    
 
+    // Fetches posts on first render
+    useEffect(() => {
+        fetchPosts()
+    }, [])
 
-    const currentUserId = parseInt(localStorage.getItem('userId') || '0')
-
+    /**
+     * handleUpdatePost - saves and edited post caption.
+     */
     const handleUpdatePost = async (postId: number) => {
         try {
             await updatePost(postId, editPostCaption)
@@ -52,6 +83,9 @@ const FeedPage: React.FC = () => {
         }
     }
 
+    /**
+     * handleUpdateComment - saves and edited comment
+     */
     const handleUpdateComment = async (postId: number, commentId: number) => {
         try {
             await updateComment(postId, commentId, editCommentContent)
@@ -67,7 +101,9 @@ const FeedPage: React.FC = () => {
         }
     }
 
-
+    /**
+     * handleDeletePost - deletes a post after confirmation. 
+     */
     const handleDeletePost = async (postId: number) => {
         if (!window.confirm('Delete this post?')) return
         try {
@@ -78,6 +114,9 @@ const FeedPage: React.FC = () => {
         }
     }
 
+    /**
+     * handleDeleteComment - deletes a comment after confirmation. 
+     */
     const handleDeleteComment = async (postId: number, commentId: number) => {
         if (!window.confirm('Delete this comment?')) return
         try {
@@ -95,10 +134,12 @@ const FeedPage: React.FC = () => {
             console.error('Delete comment failed', err)
         }
     }
-    useEffect(() => {
-        fetchPosts()
-    }, [])
-
+    
+    /** 
+     * fetchPosts - loads the next page of posts from the API.
+     * Adds to existing posts (pagination).
+     * Increments page number after each successful fetch
+    */
     const fetchPosts = async () => {
         try {
             setLoading(true)
@@ -113,6 +154,10 @@ const FeedPage: React.FC = () => {
         }
     }
 
+    /**
+     * handleLike - toggles like on a post.
+     * Calls the API then updates the post in state immediately.
+     */
     const handleLike = async (post: Post) => {
         try {
             if (post.liked) {
@@ -135,23 +180,31 @@ const FeedPage: React.FC = () => {
         }
     }
 
+    // Tracks the comment input value for a specific post
     const handleCommentChange = (postId: number, value: string) => {
         setComments({ ...comments, [postId]: value })
     }
 
+    /**
+     * handleCommentSubmit — posts a new comment.
+     * After success:
+     * - Clears the input
+     * - Joins the comment count on the post
+     * - Adds the new comment to the open list (if visible)
+     */
     const handleCommentSubmit = async (postId: number) => {
         const content = comments[postId]
-        if (!content?.trim()) return
+        if (!content?.trim()) return // Dont submit empty comments
         try {
             const newComment = await createComment(postId, content)
             setComments({ ...comments, [postId]: '' })
 
-            // update comment count
+            // Update comment count
             setPosts(posts.map(p =>
                 p.id === postId ? { ...p, comments: p.comments + 1 } : p
             ))
 
-            // add new comment to the list if comments are open
+            // Add new comment to the list if comments are open
             if (openComments[postId]) {
                 setPostComments({
                     ...postComments,
@@ -163,6 +216,28 @@ const FeedPage: React.FC = () => {
         }
     }
 
+    /** 
+     * handleToggleComments - fetches, shows and hides comments for a post.
+     */
+    const handleToggleComments = async (postId: number) => {
+        if (openComments[postId]) {
+            setOpenComments({ ...openComments, [postId]: false })
+            return
+        }
+
+        // Fetch comments then open
+        try {
+            const data = await getComments(postId)
+            setPostComments({ ...postComments, [postId]: data.comments })
+            setOpenComments({ ...openComments, [postId]: true })
+        } catch (err) {
+            console.error('Failed to load comments', err)
+        }
+    }
+
+    /**
+     * handleLogout - calls logout API endpoint then clears localStorage and redirects to login.
+     */
     const handleLogout = async () => {
         try {
             await logout()
@@ -174,31 +249,20 @@ const FeedPage: React.FC = () => {
         }
     }
 
-    const handleToggleComments = async (postId: number) => {
-        // if already open — close it
-        if (openComments[postId]) {
-            setOpenComments({ ...openComments, [postId]: false })
-            return
-        }
-
-        // fetch comments then open
-        try {
-            const data = await getComments(postId)
-            setPostComments({ ...postComments, [postId]: data.comments })
-            setOpenComments({ ...openComments, [postId]: true })
-        } catch (err) {
-            console.error('Failed to load comments', err)
-        }
-    }
+    
 
     return (
         <div className="feed-bg">
+
+
+            {/* NAVBAR */}
             <nav className="navbar">
                 <div className="nav-logo">Moments.</div>
                 <div className="nav-actions">
                     <button className="logout-btn" onClick={handleLogout}>
                         Sign out
                     </button>
+                    {/* Avatar, shows profile picture or first letter of username */}
                     <div className="nav-avatar" onClick={() => navigate('/profile')}>
                         {avatar
                             ? <img src={avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
@@ -209,6 +273,7 @@ const FeedPage: React.FC = () => {
             </nav>
 
             <div className="feed">
+                {/* Show loading only on initial load not when loading more */}
                 {loading && posts.length === 0 && (
                     <div className="feed-loading">Loading posts...</div>
                 )}
@@ -219,6 +284,7 @@ const FeedPage: React.FC = () => {
 
                 {posts.map(post => (
                     <div key={post.id} className="post-card">
+                        {/* POST HEADER - avatar, username, time, delete button */}
                         <div className="post-header">
                             <div className="post-avatar">
                                 {post.author_username[0].toUpperCase()}
@@ -227,7 +293,7 @@ const FeedPage: React.FC = () => {
                                 <div className="post-username">{post.author_username}</div>
                                 <div className="post-time">{getTimeAgo(post.created_at)}</div>
                             </div>
-                            {/* only show delete to post owner */}
+                            {/* Only show delete to post owner */}
                             {post.author === currentUserId && (
                                 <button
                                     className="delete-btn"
@@ -237,13 +303,14 @@ const FeedPage: React.FC = () => {
                                 </button>
                             )}
                         </div>
-
+                        {/* POST IMAGE - only renders if image exists */}
                         {post.image && (
                             <div className="post-image">
                                 <img src={post.image} alt="post" />
                             </div>
                         )}
 
+                        {/* Like and Comment counts*/}
                         <div className="post-actions">
                             <button
                                 className={`action-btn ${post.liked ? 'liked' : ''}`}
@@ -258,6 +325,7 @@ const FeedPage: React.FC = () => {
                             </button>
                         </div>
 
+                        {/* CAPTION - shows edit input if this post is being edited */}
                         <div className="post-caption">
                             {editingPost === post.id ? (
                                 <div className="edit-caption-row">
@@ -278,6 +346,7 @@ const FeedPage: React.FC = () => {
                                 <>
                                     <strong>{post.author_username}</strong>
                                     {post.caption}
+                                    {/* Edit pencil only visible to post owner */}
                                     {post.author === currentUserId && (
                                         <button
                                             className="edit-btn-inline"
@@ -292,7 +361,7 @@ const FeedPage: React.FC = () => {
                                 </>
                             )}
                         </div>
-
+                        {/* COMMENTS TOGGLE - only shown if post has comments */}
                         {post.comments > 0 && (
                             <div
                                 className="post-comments-preview"
@@ -312,6 +381,7 @@ const FeedPage: React.FC = () => {
                                     <div key={comment.id} className="comment-row">
                                         <div className="comment-content">
                                             <strong>{comment.author_username}</strong>
+                                            {/* Show edit input if this comment is being edited */}
                                             {editingComment === comment.id ? (
                                                 <div className="edit-comment-row">
                                                     <input
@@ -330,6 +400,7 @@ const FeedPage: React.FC = () => {
                                             ) : (
                                                 <>
                                                     <span>{comment.content}</span>
+                                                    {/* Edit pencil only visible to comment owner */}
                                                     {comment.author === currentUserId && (
                                                         <button
                                                             className="edit-btn-inline"
@@ -344,6 +415,7 @@ const FeedPage: React.FC = () => {
                                                 </>
                                             )}
                                         </div>
+                                        {/* Delete button only shows to comment owner and not while editing */}
                                         {comment.author === currentUserId && editingComment !== comment.id && (
                                             <button
                                                 className="delete-comment-btn"
@@ -357,6 +429,7 @@ const FeedPage: React.FC = () => {
                             </div>
                         )}
 
+                        {/* COMMENT INPUT */}
                         <div className="comment-input-row">
                             <input
                                 className="comment-input"
@@ -377,6 +450,7 @@ const FeedPage: React.FC = () => {
                     </div>
                 ))}
 
+                {/* LOAD MORE - only shown if there are more pages to show */}
                 {hasNext && (
                     <button className="load-more-btn" onClick={fetchPosts}>
                         {loading ? 'Loading...' : 'Load more'}

@@ -7,13 +7,31 @@ import './ProfilePage.css'
 
 const MEDIA_URL = 'http://127.0.0.1:8000'
 
+
+
+/**
+ * ProfilePage - shows the current users profile and their posts.
+ * 
+ * Features: 
+ * - Shows avatar, username, boi and posts
+ * - Inline editing
+ * - Avatar change
+ * - Post grid
+ * 
+ * API :
+ * - Profile GET /api/users/<id>/profile
+ * - Posts GET /api/posts/ 
+ */
 const ProfilePage: React.FC = () => {
     const navigate = useNavigate()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
+    // Profile state
     const [profile, setProfile] = useState<Profile | null>(null)
     const [posts, setPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+
+    // Edit mode state
     const [editing, setEditing] = useState<boolean>(false)
     const [username, setUsername] = useState<string>('')
     const [bio, setBio] = useState<string>('')
@@ -27,11 +45,15 @@ const ProfilePage: React.FC = () => {
         return id ? parseInt(id) : 1
     }
 
+    // Fetch profile and posts 
     useEffect(() => {
         fetchProfile()
         fetchUserPosts()
     }, [])
 
+    /**
+     * fetchProfile - loads the current users profile from the API.
+     */
     const fetchProfile = async () => {
         try {
             const id = getUserId()
@@ -48,7 +70,7 @@ const ProfilePage: React.FC = () => {
 
             setAvatarPreview(picUrl)
 
-            // save to localStorage so feed can use it
+            // Save to localStorage so feed can use it
             if (picUrl) localStorage.setItem('userAvatar', picUrl)
             localStorage.setItem('userUsername', data.username)
 
@@ -59,10 +81,13 @@ const ProfilePage: React.FC = () => {
         }
     }
 
+    /**
+     * fetchUserPosts - loads all posts and filters to only the current users.
+     */
     const fetchUserPosts = async () => {
         try {
             const data = await getPosts()
-            // filter only current user's posts
+            // Filter only current user's posts
             const id = getUserId()
             setPosts(data.posts.filter(p => p.author === id))
         } catch (err) {
@@ -70,6 +95,9 @@ const ProfilePage: React.FC = () => {
         }
     }
 
+    /** 
+     * handleAvatarChange - runs when user picks a new avatar file.
+    */
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -77,14 +105,16 @@ const ProfilePage: React.FC = () => {
             setAvatarPreview(URL.createObjectURL(file))
         }
     }
-
+    /**
+     * handleSave - sends update profile to the API.
+     */
     const handleSave = async () => {
         try {
             const id = getUserId()
             const updated = await updateProfile(
                 id,
                 bio,
-                avatarFile || undefined
+                avatarFile || undefined // Undefined means keep existing picture
             )
             setProfile(updated)
             setEditing(false)
@@ -94,6 +124,9 @@ const ProfilePage: React.FC = () => {
         }
     }
 
+    /**
+     * handleCancel - discard all edits and resets to original values.
+     */
     const handleCancel = () => {
         if (profile) {
             setUsername(profile.username)
@@ -107,7 +140,7 @@ const ProfilePage: React.FC = () => {
         setAvatarFile(null)
         setEditing(false)
     }
-
+    // Show loading screen while profile is being fetched.
     if (loading) {
         return (
             <div className="profile-bg">
@@ -130,7 +163,7 @@ const ProfilePage: React.FC = () => {
 
             <div className="profile-page">
                 <div className="profile-header">
-
+                    {/* Avatar - clickable only in edit mode. */}
                     <div
                         className="profile-avatar"
                         onClick={() => editing && fileInputRef.current?.click()}
@@ -153,7 +186,7 @@ const ProfilePage: React.FC = () => {
                     <div className="profile-info">
                         {editing ? (
                             <>
-
+                                {/* Edit mode — bio becomes a textarea */}
                                 <div className="field-label">Bio</div>
                                 <textarea
                                     className="bio-input"
@@ -165,11 +198,13 @@ const ProfilePage: React.FC = () => {
                             </>
                         ) : (
                             <>
+                                {/* view mode — show username and bio as text */}
                                 <div className="profile-username">{username}</div>
                                 <div className="profile-bio">{bio || 'No bio yet'}</div>
                             </>
                         )}
 
+                        {/* post count — uses filtered posts length from fetchUserPosts */}
                         <div className="profile-stats">
                             <div className="stat">
                                 <div className="stat-number">{posts.length}</div>
@@ -177,6 +212,7 @@ const ProfilePage: React.FC = () => {
                             </div>
                         </div>
 
+                        {/* buttons switch between edit mode and view mode */}
                         {editing ? (
                             <div className="btn-row">
                                 <button className="save-btn" onClick={handleSave}>Save</button>
@@ -190,6 +226,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                 </div>
 
+                {/* POST GRID*/}
                 <div className="posts-grid-title">Posts</div>
                 {posts.length === 0 ? (
                     <div style={{ textAlign: 'center', color: '#555555', fontSize: '14px', padding: '40px 0' }}>
@@ -200,6 +237,7 @@ const ProfilePage: React.FC = () => {
                         {posts.map(post => (
                             <div key={post.id} className="grid-item">
                                 {post.image && <img src={post.image} alt="post" />}
+                                {/* overlay shows likes and comments on hover */}
                                 <div className="grid-item-overlay">
                                     <span>❤️ {post.likes}</span>
                                     <span>💬 {post.comments}</span>

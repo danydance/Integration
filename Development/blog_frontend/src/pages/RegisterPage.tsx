@@ -3,6 +3,23 @@ import { useNavigate } from 'react-router-dom'
 import { register } from '../api/auth'
 import './RegisterPage.css'
 
+/**
+ * RegisterPage — registration page for new users.
+ *
+ * Flow:
+ * 1. User enters username, password and confirm password
+ * 2. Frontend validates before sending to API:
+ *    - Passwords must match
+ *    - Password must be at least 8 characters
+ * 3. Calls POST /api/auth/register/ → gets token and user info
+ * 4. Saves token and userId to localStorage
+ * 5. Navigates to feed
+ * 
+ * localStorage keys set here:
+ * - token
+ * - userId
+ */
+
 const RegisterPage: React.FC = () => {
     const navigate = useNavigate()
     const [username, setUsername] = useState<string>('')
@@ -10,6 +27,10 @@ const RegisterPage: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+
+    /**
+     * handleSubmit — validates inputs then calls the register API.
+     */
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -53,7 +74,8 @@ const RegisterPage: React.FC = () => {
             <div className="register-card">
                 <div className="register-logo">Insta 2.0</div>
                 <div className="register-tagline">Share all your life secrets.</div>
-
+                
+                {/* Error message — shown for both frontend and API errors */}
                 {error && <div className="register-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
@@ -68,6 +90,7 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
 
+                    {/* Confirm password — validated client side before API call */}
                     <div className="form-group">
                         <label>Password</label>
                         <input
@@ -78,6 +101,8 @@ const RegisterPage: React.FC = () => {
                             required
                         />
                     </div>
+
+                    {/* Disabled while request is in flight to prevent double submit */}
                     <div className="form-group">
                         <label>Password check</label>
                         <input
