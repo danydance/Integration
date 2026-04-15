@@ -26,6 +26,7 @@ export interface Post {
     liked: boolean              // total like count - from backend Serializer
     likes: number               // total comment count - from backend Serializer
     comments: number            // managed locally in frontend state
+    has_liked: boolean
 }
 
 export interface Comment {

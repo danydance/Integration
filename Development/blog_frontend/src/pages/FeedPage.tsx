@@ -160,7 +160,7 @@ const FeedPage: React.FC = () => {
      */
     const handleLike = async (post: Post) => {
         try {
-            if (post.liked) {
+            if (post.has_liked) {
                 await unlikePost(post.id)
             } else {
                 await likePost(post.id)
@@ -169,8 +169,8 @@ const FeedPage: React.FC = () => {
                 if (p.id === post.id) {
                     return {
                         ...p,
-                        liked: !p.liked,
-                        likes: p.liked ? p.likes - 1 : p.likes + 1
+                        has_liked: !p.has_liked,
+                        likes: p.has_liked ? p.likes - 1 : p.likes + 1
                     }
                 }
                 return p
@@ -244,7 +244,7 @@ const FeedPage: React.FC = () => {
         } catch (err) {
             console.error('Logout failed', err)
         } finally {
-            localStorage.clear()
+            localStorage.removeItem('token')
             navigate('/login')
         }
     }
@@ -257,7 +257,7 @@ const FeedPage: React.FC = () => {
 
             {/* NAVBAR */}
             <nav className="navbar">
-                <div className="nav-logo">Moments.</div>
+                <div className="nav-logo">Insta Beck</div>
                 <div className="nav-actions">
                     <button className="logout-btn" onClick={handleLogout}>
                         Sign out
@@ -313,13 +313,13 @@ const FeedPage: React.FC = () => {
                         {/* Like and Comment counts*/}
                         <div className="post-actions">
                             <button
-                                className={`action-btn ${post.liked ? 'liked' : ''}`}
+                                className={`action-btn ${post.has_liked ? 'liked' : ''}`}
                                 onClick={() => handleLike(post)}
                             >
-                                {post.liked ? '❤️' : '🤍'}
+                                {post.has_liked ? '❤️' : '🤍'}
                                 <span className="action-count">{post.likes}</span>
                             </button>
-                            <button className="action-btn">
+                            <button className="action-btn-comment" disabled>
                                 💬
                                 <span className="action-count">{post.comments}</span>
                             </button>

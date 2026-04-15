@@ -49,7 +49,7 @@ const CreatePostPage: React.FC = () => {
 
         // Validate file size - max 1000MB
         if (file.size > 1000 * 1024 * 1024) {
-            setError('Image must be under 5MB.')
+            setError('Image must be under 1000MB.')
             return
         }
 
@@ -92,7 +92,7 @@ const CreatePostPage: React.FC = () => {
                 <button className="nav-back" onClick={() => navigate(backTo)}>
                     ← Back
                 </button>
-                <div className="nav-logo">Moments.</div>
+                <div className="nav-logo">Insta Beck</div>
                 <div style={{ width: '60px' }} />
             </nav>
 
@@ -128,7 +128,7 @@ const CreatePostPage: React.FC = () => {
                             <>
                                 <div className="upload-icon">🖼️</div>
                                 <div className="upload-text">Click to upload a photo</div>
-                                <div className="upload-subtext">JPEG, PNG or WEBP — max 5MB</div>
+                                <div className="upload-subtext">JPEG, PNG or WEBP — max 1000MB</div>
                             </>
                         )}
                     </div>

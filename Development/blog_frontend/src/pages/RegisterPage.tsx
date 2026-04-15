@@ -72,7 +72,7 @@ const RegisterPage: React.FC = () => {
     return (
         <div className="register-bg">
             <div className="register-card">
-                <div className="register-logo">Insta 2.0</div>
+                <div className="register-logo">Insta Beck</div>
                 <div className="register-tagline">Share all your life secrets.</div>
                 
                 {/* Error message — shown for both frontend and API errors */}

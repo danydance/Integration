@@ -90,7 +90,7 @@ const LoginPage: React.FC = () => {
 
             {/* LOGIN CARD gets pushed up */}
             <div className={`login-card ${leaving ? 'push-up' : ''}`}>
-                <div className="login-logo">Moments.</div>
+                <div className="login-logo">Insta Beck</div>
                 <div className="login-tagline">Share what matters</div>
 
                 {/* ERROR message - only when login fails */}

@@ -10,8 +10,7 @@ const fixImageUrl = (post: Post): Post => ({
         ? post.image.startsWith('http')
             ? post.image
             : `${MEDIA_URL}${post.image}` 
-        : null,
-    liked: false // Liked is manage locally in the frontend
+        : null
 })
 
 //Get paginated posts - default page 1

@@ -103,7 +103,7 @@ const EditPostPage: React.FC = () => {
                 <button className="nav-back" onClick={() => navigate('/profile')}>
                     ← Back
                 </button>
-                <div className="nav-logo">Moments.</div>
+                <div className="nav-logo">Insta Beck</div>
                 <div style={{ width: '60px' }} />
             </nav>
 
