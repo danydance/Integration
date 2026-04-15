@@ -23,6 +23,11 @@ export const getPosts = async (page: number = 1): Promise<PaginatedPosts> => {
     }
 }
 
+// Get a single Post
+export const getPost = (id: number): Promise<Post> => {
+    return request<Post>(`/posts/${id}/`)
+}
+
 // Create a new post
 export const createPost = (image: File, caption: string): Promise<Post> => {
     const formData = new FormData()
@@ -42,9 +47,14 @@ export const deletePost = (id: number): Promise<void> => {
 }
 
 // Update a posts caption
-export const updatePost = (id: number, caption: string): Promise<Post> => {
+export const updatePost = (id: number, caption: string, image?: File): Promise<Post> => {
+    const formData = new FormData()
+    formData.append('caption', caption)
+    if (image) {
+        formData.append('image', image)
+    }
     return request<Post>(`/posts/${id}/`, {
         method: 'PATCH',
-        body: JSON.stringify({ caption }),
+        body: formData,
     })
 }

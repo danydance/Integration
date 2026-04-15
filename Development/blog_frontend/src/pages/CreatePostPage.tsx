@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { createPost } from '../api/posts'
 import './CreatePostPage.css'
 
@@ -21,6 +21,7 @@ import './CreatePostPage.css'
 
 const CreatePostPage: React.FC = () => {
     const navigate = useNavigate()
+    const location = useLocation()
 
     // ref to the hidden file input - triggered programmatically when upload area is clicked
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -83,10 +84,12 @@ const CreatePostPage: React.FC = () => {
         }
     }
 
+    const backTo = location.state?.from || '/'
+
     return (
         <div className="create-bg">
             <nav className="navbar">
-                <button className="nav-back" onClick={() => navigate('/')}>
+                <button className="nav-back" onClick={() => navigate(backTo)}>
                     ← Back
                 </button>
                 <div className="nav-logo">Moments.</div>

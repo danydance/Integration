@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage'
 import FeedPage from './pages/FeedPage'
 import ProfilePage from './pages/ProfilePage'
 import CreatePostPage from './pages/CreatePostPage'
+import EditPostPage from './pages/EditPostPage'
 
 /** 
  * PrivateRoute, protects pages that require authentication
@@ -43,6 +44,7 @@ const App: React.FC = () => {
                 {/* Private pages - redirects to login without token */}
                 <Route path="/" element={<PrivateRoute element={<FeedPage />} />} />
                 <Route path="/profile" element={<PrivateRoute element={<ProfilePage />} />} />
+                <Route path="/edit/:id" element={<PrivateRoute element={<EditPostPage />} />} />
                 <Route path="/create" element={<PrivateRoute element={<CreatePostPage />} />} />
 
                 {/* Catch all unknown routes - redirect to login */}

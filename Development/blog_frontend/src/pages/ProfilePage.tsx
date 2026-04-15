@@ -235,7 +235,7 @@ const ProfilePage: React.FC = () => {
                 ) : (
                     <div className="posts-grid">
                         {posts.map(post => (
-                            <div key={post.id} className="grid-item">
+                            <div key={post.id} className="grid-item" onClick={() => navigate(`/edit/${post.id}`)}>
                                 {post.image && <img src={post.image} alt="post" />}
                                 {/* overlay shows likes and comments on hover */}
                                 <div className="grid-item-overlay">
@@ -247,6 +247,9 @@ const ProfilePage: React.FC = () => {
                     </div>
                 )}
             </div>
+            <button className="fab" onClick={() => navigate('/create', {state: { from: '/profile'}})}>
+                +
+            </button>
         </div>
     )
 }
