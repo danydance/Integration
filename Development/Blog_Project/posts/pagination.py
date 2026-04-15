@@ -9,18 +9,19 @@ class PostPagination:
     Splits posts into pages of a fixed size.
     """
 
-    def __init__(self, all_posts, request, page_size: int = 10):
+    def __init__(self, all_posts, request, page_size: int = 4, context=None):
         """
         Initialize pagination with a all_posts, request and page size.
 
         all_posts  — the full list of posts from the database
         request   — the HTTP request (used to read ?page= from the URL)
-        page_size — how many posts per page (default 10)
+        page_size — how many posts per page (default 4)
         """
         self.all_posts = all_posts
         self.page_size = page_size
         self.page = self._get_page_number(request)
         self.total = all_posts.count() # Counts amount of posts using sql count
+        self.context = context or {'request': request}
 
     def _get_page_number(self, request) -> int:
         """
@@ -54,7 +55,7 @@ class PostPagination:
         end = start + self.page_size                # page 1 → 10, page 2 → 20
 
         posts = self.all_posts[start:end] # All the page posts
-        data = PostSerializer(posts, many=True).data # Database connection
+        data = PostSerializer(posts, many=True, context=self.context).data # Database connection
 
         return JsonResponse({
             "count": self.total,

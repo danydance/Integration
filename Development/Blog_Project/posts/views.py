@@ -28,11 +28,22 @@ class PostCollectionView(APIView):
         """
         Return all posts ordered by newest first — paginated.
         Use ?page=2 to get the second page.
-        Default page size is 10.
+        Default page size is 4.
         """
         posts = Post.objects.all().order_by("-created_at")
-        pagination = PostPagination(posts, request, page_size=10)
+        pagination = PostPagination(posts, request)
         return pagination.get_page()
+
+    @extend_schema(
+        responses={200: PostSerializer(many=True)},
+        summary="Get a Post like",
+        tags=["Posts"]
+    )
+    def get(self, request) -> JsonResponse:
+        posts = Post.objects.all().order_by("-created_at")
+        pagination = PostPagination(posts, request, context={'request': request})
+        return pagination.get_page()
+    
 
     @extend_schema(
         request=PostWriteSerializer,
