@@ -244,7 +244,7 @@ const FeedPage: React.FC = () => {
         } catch (err) {
             console.error('Logout failed', err)
         } finally {
-            localStorage.removeItem('token')
+            localStorage.clear()
             navigate('/login')
         }
     }
