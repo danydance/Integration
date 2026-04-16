@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../api/auth'
 import { getProfile } from '../api/profile'
-import './LoginPage.css'
+import '../styles/global.css'
 
 /**
  * LoginPage.
@@ -79,7 +79,7 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <div className="login-bg">
+        <div className="auth-bg">
 
             {/* FAKE POSTS sliding up from below for animation */}
             <div className={`posts-preview ${leaving ? 'slide-up' : ''}`}>
@@ -89,12 +89,12 @@ const LoginPage: React.FC = () => {
             </div>
 
             {/* LOGIN CARD gets pushed up */}
-            <div className={`login-card ${leaving ? 'push-up' : ''}`}>
-                <div className="login-logo">Insta Beck</div>
-                <div className="login-tagline">Share what matters</div>
+            <div className={`auth-card ${leaving ? 'push-up' : ''}`}>
+                <div className="auth-logo">Insta Beck</div>
+                <div className="auth-tagline">Share what matters</div>
 
                 {/* ERROR message - only when login fails */}
-                {error && <div className="login-error">{error}</div>}
+                {error && <div className="form-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -134,7 +134,7 @@ const LoginPage: React.FC = () => {
                     <div className="divider-line" />
                 </div>
 
-                <div className="register-link">
+                <div className="auth-footer">
                     Don't have an account?{' '}
                     <span onClick={() => navigate('/register')}>Create one</span>
                 </div>

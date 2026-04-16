@@ -5,7 +5,9 @@ import { likePost, unlikePost } from '../api/likes'
 import { getComments, createComment, deleteComment, updateComment } from '../api/comments'
 import { logout } from '../api/auth'
 import { PaginatedPosts, Post } from '../types'
-import './FeedPage.css'
+import '../styles/FeedPage.css'
+import Navbar from '../components/Navbar'
+import FAB from '../components/FAB'
 
 /**
  * getTimeAgon - converts Date to string of the relative time.
@@ -256,21 +258,11 @@ const FeedPage: React.FC = () => {
 
 
             {/* NAVBAR */}
-            <nav className="navbar">
-                <div className="nav-logo">Insta Beck</div>
-                <div className="nav-actions">
-                    <button className="logout-btn" onClick={handleLogout}>
-                        Sign out
-                    </button>
-                    {/* Avatar, shows profile picture or first letter of username */}
-                    <div className="nav-avatar" onClick={() => navigate('/profile')}>
-                        {avatar
-                            ? <img src={avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                            : navUsername[0].toUpperCase()
-                        }
-                    </div>
-                </div>
-            </nav>
+            <Navbar 
+                showAvatar
+                showLogout
+                onLogout={handleLogout}
+            />
 
             <div className="feed">
                 {/* Show loading only on initial load not when loading more */}
@@ -457,10 +449,9 @@ const FeedPage: React.FC = () => {
                     </button>
                 )}
             </div>
-
-            <button className="fab" onClick={() => navigate('/create')}>
-                +
-            </button>
+            
+            {/* The + button for creating a new post */}
+            <FAB />
         </div>
     )
 }

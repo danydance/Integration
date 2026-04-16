@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { getProfile, updateProfile } from '../api/profile'
 import { getPosts } from '../api/posts'
 import { Profile, Post } from '../types'
-import './ProfilePage.css'
+import '../styles/ProfilePage.css'
+import Navbar from '../components/Navbar'
+import FAB from '../components/FAB'
 
 const MEDIA_URL = 'http://127.0.0.1:8000'
 
@@ -153,13 +155,7 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-bg">
-            <nav className="navbar">
-                <button className="nav-back" onClick={() => navigate('/')}>
-                    ← Back
-                </button>
-                <div className="nav-logo">Insta Beck</div>
-                <div style={{ width: '60px' }} />
-            </nav>
+            <Navbar showBack backTo="/" />
 
             <div className="profile-page">
                 <div className="profile-header">
@@ -247,9 +243,9 @@ const ProfilePage: React.FC = () => {
                     </div>
                 )}
             </div>
-            <button className="fab" onClick={() => navigate('/create', {state: { from: '/profile'}})}>
-                +
-            </button>
+            
+            {/* The + button for creating a new post */}
+            <FAB />
         </div>
     )
 }

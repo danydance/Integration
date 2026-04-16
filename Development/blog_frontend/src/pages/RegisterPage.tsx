@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { register } from '../api/auth'
-import './RegisterPage.css'
+import '../styles/global.css'
 
 /**
  * RegisterPage — registration page for new users.
@@ -70,13 +70,13 @@ const RegisterPage: React.FC = () => {
     }
 
     return (
-        <div className="register-bg">
-            <div className="register-card">
-                <div className="register-logo">Insta Beck</div>
-                <div className="register-tagline">Share all your life secrets.</div>
+        <div className="auth-bg">
+            <div className="auth-card">
+                <div className="auth-logo">Insta Beck</div>
+                <div className="auth-tagline">Share all your life secrets.</div>
                 
                 {/* Error message — shown for both frontend and API errors */}
-                {error && <div className="register-error">{error}</div>}
+                {error && <div className="auth-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
